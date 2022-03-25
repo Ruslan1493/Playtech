@@ -10,16 +10,34 @@
 
 <body>
     <main class="main">
-        <section class="first">
+        <header class="first">
             <p>Robot factory</p>
-            <img src="./pl2.jpg"/>
-        </section>
-        <section class="second">
-            <p class="header">Basic Robot</p>
-            <div class="wrapper">
+            <img src="./pl2.jpg" />
+        </header>
+        <section id="slide-1" class="factory-section">
+            <p class="factory-header">Basic Robot</p>
+            <div class="content-wrapper">
                 <div class="robotWrapper">
-                    <div class="robot"></div>
+                    <div id="robot">
+                        <div id="robot-head">
+                            <div class="robot-eyes"></div>
+                            <div class="robot-eyes"></div>
+                            <div id="robot-mouth"></div>
+                        </div>
+                        <div id="robot-body"></div>
+                        <div id="robot-legs"></div>
+                    </div>
                     <p>Robot name</p>
+                </div>
+                <div class="boxesWrapper">
+                    <p id="first-paragraph" class="paragraph" >Paragraph text here. Text-align on left, 3% space from right border. 
+                        Text is only 2 lines and ends with 3 dots... because it's too long.
+                        On hover full text is shown as tooltip. First letter is bold.
+                    </p>
+                    <p class="paragraph">Paragraph text here. Text justified, 6% space from right border. Text is only 2 lines 
+                        and ends with three dots... because it's too long. On hover full text is shown. First word is italic.
+                    </p>
+                    <p class="paragraph">Paragraph text here. Text-align on left, 9% space from right border. Image on left side.</p>
                 </div>
             </div>
         </section>
