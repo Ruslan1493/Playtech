@@ -63,6 +63,7 @@ main {
 }
 
 .content-wrapper {
+    max-height: 320px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -76,47 +77,96 @@ main {
     border: 1px solid black;
 }
 
-.boxesWrapper{
-    min-height: fit-content;
+.boxesWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     margin: 10px;
-    margin-right:0;
+    margin-right: 0;
 }
 
 .paragraph {
     background-color: #ffffff;
-
-    margin: 10px;
-    margin-right:0;
+    font-size: 1.2rem; 
+    /* margin: 10px; */
+    margin-right: 0;
     padding: 10px 10px;
     border: 1px solid black;
 }
 
-#first-paragraph{
+#first-paragraph {
     text-align: left;
     margin-top: 0;
     margin-right: 3%;
 }
 
-.boxesWrapper > p:nth-child(2){
-    margin-right: 6%;
+
+#first-paragraph::first-letter {
+    font-weight: bold;
 }
 
-.boxesWrapper > p:last-child{
+#first-paragraph .tooltip {
+   visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+  
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+#first-paragraph:hover .tooltip {
+    visibility:visible;
+}
+
+.boxesWrapper > p:nth-child(2) .tooltip {
+    visibility: hidden;
+     width: 120px;
+     background-color: black;
+     color: #fff;
+     text-align: center;
+     border-radius: 6px;
+     padding: 5px 0;
+   
+     /* Position the tooltip */
+     position: absolute;
+     z-index: 1;
+ }
+
+ .boxesWrapper > p:nth-child(2):hover .tooltip {
+    visibility:visible;
+}
+
+.boxesWrapper>p:nth-child(2) {
+    margin-right: 6%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.boxesWrapper>p:last-child {
     margin-bottom: 0;
     margin-right: 9%;
 }
 
-#robot-head{
+.robot-name{
+    margin:0;
+    margin-bottom: 5px;
+}
+#robot-head {
     display: block;
     position: relative;
     width: 50px;
     height: 50px;
-    margin: 10px auto;
+    margin: 5px auto;
     border: 1px solid black;
     border-radius: 50%;
-}   
+}
 
-.robot-eyes{
+.robot-eyes {
     position: absolute;
     display: block;
     width: 10px;
@@ -126,15 +176,15 @@ main {
     border-radius: 50%;
 }
 
-.robot-eyes:nth-child(1){
+.robot-eyes:nth-child(1) {
     left: 5px;
 }
 
-.robot-eyes:nth-child(2){
+.robot-eyes:nth-child(2) {
     right: 5px;
 }
 
-#robot-mouth{
+#robot-mouth {
     position: relative;
     display: block;
     width: 20px;
@@ -145,6 +195,56 @@ main {
     border-radius: 50%;
 }
 
-#robot-body{
+#robot-body {
+    position: relative;
+    margin: 0 auto;
+    border-top: 85px solid #F16527;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    height: 0;
+    width: 50px;
+}
 
+.hands {
+    position: absolute;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #F3F3F3;
+    margin: 0 auto;
+    width: 10px;
+    height: 64px;
+}
+
+.hands:nth-child(1) {
+    left: -31;
+    top: -80px;
+}
+
+.hands:nth-child(2) {
+    right: -31;
+    top: -80px;
+}
+
+#robot-legs {
+    position: relative;
+    width: 36px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.legs{
+    position: absolute;
+    width: 10px;
+    height: 47px;
+    border: 1px solid black;
+    border-top: none;
+    margin: 0 auto;
+}
+
+.legs:nth-child(1) {
+    left: -6px;
+}
+
+.legs:nth-child(2) {
+    right: -6px;
 }
