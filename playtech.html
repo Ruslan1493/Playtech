@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="playtech.css">
+    <link rel="stylesheet" type="text/css" href="playtech2.css">
     <title>Document</title>
 </head>
 
@@ -50,11 +51,53 @@
                             text is shown. First word is italic.
                         </span>
                     </p>
-                    
-                    <p class="paragraph"><img src="goodluck.webp" alt="goodluck"/>Paragraph text here. Text-align on left, 9% space from right border. Image on
+
+                    <p class="paragraph"><img src="goodluck.webp" alt="goodluck" />Paragraph text here. Text-align on
+                        left, 9% space from right border. Image on
                         left side.</p>
                 </div>
             </div>
+        </section>
+        <section id="slide-2" class="form-section">
+            <h2>Create Robot</h2>
+            <div class="form-wrapper">
+                <div class="name">
+                    <label>Name</label>
+                    <input type="text" placeholder="Robot name" />
+                </div>
+                <div class="select-type">
+                    <label>Select type</label>
+                    <select>
+                        <option>Basic Robot</option>
+                        <option>Small Robot</option>
+                    </select>
+                </div>
+                <div class="select-color">
+                    <label>Select color</label>
+                    <input type="color" id="head" name="head" value="#e96126">
+                </div>
+                <div class="select-option">
+                    <label>Select options</label>
+                    <div class="can-jump">
+                        <input type="checkbox" id="can-jump" checked/>
+                        <label>can jump</label>
+                    </div>
+                    <div class="can-talk">
+                        <input type="checkbox" id="can-talk" checked/>
+                        <label>can talk</label>
+                    </div>
+                    <div class="can-blink">
+                        <input type="checkbox" id="can-blink" checked/>
+                        <label>can blink</label>
+                    </div>           
+                </div>
+                <div class="write-comment">
+                    <label>Write comment</label>
+                    <textarea></textarea>
+                </div>
+            </div>
+            <button>Create</button>
+            <button>Show created robots</button>
         </section>
     </main>
 </body>
