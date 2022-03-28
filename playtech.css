@@ -88,7 +88,7 @@ main {
 
 .paragraph {
     background-color: #ffffff;
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
     /* margin: 10px; */
     margin-right: 0;
     padding: 10px 10px;
@@ -99,6 +99,11 @@ main {
     text-align: left;
     margin-top: 0;
     margin-right: 3%;
+    animation: fadeIn linear 1s;
+    -webkit-animation: fadeIn linear 1s;
+    -moz-animation: fadeIn linear 1s;
+    -o-animation: fadeIn linear 1s;
+    -ms-animation: fadeIn linear 1s;
 }
 
 
@@ -107,51 +112,61 @@ main {
 }
 
 #first-paragraph .tooltip {
-   visibility: hidden;
+    visibility: hidden;
     width: 120px;
     background-color: black;
     color: #fff;
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
-  
+
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
 }
 
 #first-paragraph:hover .tooltip {
-    visibility:visible;
+    visibility: visible;
 }
 
-.boxesWrapper > p:nth-child(2) .tooltip {
+.boxesWrapper>p:nth-child(2) .tooltip {
     visibility: hidden;
-     width: 120px;
-     background-color: black;
-     color: #fff;
-     text-align: center;
-     border-radius: 6px;
-     padding: 5px 0;
-   
-     /* Position the tooltip */
-     position: absolute;
-     z-index: 1;
- }
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
 
- .boxesWrapper > p:nth-child(2):hover .tooltip {
-    visibility:visible;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.boxesWrapper>p:nth-child(2):hover .tooltip {
+    visibility: visible;
 }
 
 .boxesWrapper>p:nth-child(2) {
     margin-right: 6%;
     margin-top: 0px;
     margin-bottom: 0px;
+    animation: fadeIn linear 2s;
+    -webkit-animation: fadeIn linear 2s;
+    -moz-animation: fadeIn linear 2s;
+    -o-animation: fadeIn linear 2s;
+    -ms-animation: fadeIn linear 2s;
 }
 
 .boxesWrapper>p:last-child {
     margin-bottom: 0;
     margin-right: 9%;
     text-align: left;
+    animation: fadeIn linear 3s;
+    -webkit-animation: fadeIn linear 3s;
+    -moz-animation: fadeIn linear 3s;
+    -o-animation: fadeIn linear 3s;
+    -ms-animation: fadeIn linear 3s;
 }
 
 .boxesWrapper>p>img {
@@ -161,10 +176,11 @@ main {
     display: block;
 }
 
-.robot-name{
-    margin:0;
+.robot-name {
+    margin: 0;
     margin-bottom: 5px;
 }
+
 #robot-head {
     display: block;
     position: relative;
@@ -202,6 +218,7 @@ main {
     margin: 10px auto;
     border: 1px solid black;
     border-radius: 50%;
+    animation: changeMouth ease-in-out 2s infinite;
 }
 
 #robot-body {
@@ -227,7 +244,7 @@ main {
 .hands:nth-child(1) {
     top: -80px;
     left: -31px;
-    
+
 }
 
 .hands:nth-child(2) {
@@ -242,7 +259,7 @@ main {
     margin: 0 auto;
 }
 
-.legs{
+.legs {
     position: absolute;
     width: 10px;
     height: 47px;
@@ -257,4 +274,15 @@ main {
 
 .legs:nth-child(2) {
     right: -6px;
+}
+
+@keyframes fadeIn {
+    0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@keyframes changeMouth {
+    0% {height:4px;}
+    50%{ height: 20px; top: 15px;}
+  100% {height:4px;}
 }
