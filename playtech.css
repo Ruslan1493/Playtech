@@ -277,12 +277,52 @@ main {
 }
 
 @keyframes fadeIn {
-    0% {opacity:0;}
-  100% {opacity:1;}
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes changeMouth {
-    0% {height:4px;}
-    50%{ height: 20px; top: 15px;}
-  100% {height:4px;}
+    0% {
+        height: 4px;
+    }
+
+    50% {
+        height: 20px;
+        top: 15px;
+    }
+
+    100% {
+        height: 4px;
+    }
+}
+
+@media only screen and (max-width: 1300px) {
+    .paragraph{
+        font-size: 1rem;
+        margin: 0 10px;
+    }
+
+    .boxesWrapper>p:nth-child(2){
+        margin: 0 10px;
+    }
+
+    .boxesWrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 10px;
+        margin-right: 0;
+    }
+
+    .boxesWrapper > p> img{
+        float: left;
+        max-width: 100%;
+        height: 20%;
+        display: block;
+    }
 }
