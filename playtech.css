@@ -1,5 +1,5 @@
 main {
-    width: 50%;
+    width: 50vw;
     margin: 100px auto;
 
 }
@@ -302,27 +302,35 @@ main {
 }
 
 @media only screen and (max-width: 1300px) {
-    .paragraph{
-        font-size: 1rem;
-        margin: 0 10px;
-    }
-
-    .boxesWrapper>p:nth-child(2){
-        margin: 0 10px;
+    .main{
+        width: 75vw;
     }
 
     .boxesWrapper {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: space-between;
         margin: 10px;
         margin-right: 0;
     }
+}
 
-    .boxesWrapper > p> img{
-        float: left;
-        max-width: 100%;
-        height: 20%;
-        display: block;
+@media only screen and (max-width: 750px) {
+    #slide-1{
+        min-height: 65vh;
+    }
+
+    .content-wrapper{
+        min-height: 400px;
+    }
+
+    .boxesWrapper > p{
+       margin-top: 0;
+       margin-bottom: 0;
+    }
+
+    p> img{
+        max-width: 29px;
+        height: 56px;
     }
 }
