@@ -65,10 +65,12 @@
             <h2>Create Robot</h2>
             <div class="form-wrapper">
                 <div class="name">
+                    <label class="error" name="error">Please fill the name</label>
                     <label>Name</label>
                     <input type="text" placeholder="Robot name" />
                 </div>
                 <div class="select-type">
+                    <label class="error" name="error">Please select a type</label>
                     <label>Select type</label>
                     <select>
                         <option></option>
@@ -77,6 +79,7 @@
                     </select>
                 </div>
                 <div class="select-color">
+                    <label class="error" name="error">Please select a color </label>
                     <label>Select color</label>
                     <input type="color" id="head" name="head" value="#e96126">
                 </div>
@@ -96,6 +99,7 @@
                     </div>
                 </div>
                 <div class="write-comment">
+                    <label class="error" name="error">Please write a phrase</label>
                     <label>Write phrase</label>
                     <textarea placeholder="text area"></textarea>
                 </div>

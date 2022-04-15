@@ -57,6 +57,7 @@ input{
 }
 
 .select-option {
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -70,6 +71,10 @@ input{
     padding: 5px;
     border: 1px solid black;
     border-radius: 2px;
+}
+
+.select-type label {
+    text-align: center;
 }
 
 .checkbox-wrapper>input {
@@ -118,6 +123,11 @@ input{
     border-radius: 3px;
     padding: 5px 10px;
     border: 1px solid black;
+}
+
+.error{
+    color: tomato;
+    visibility:hidden;
 }
 
 @media only screen and (max-width: 1300px) {
