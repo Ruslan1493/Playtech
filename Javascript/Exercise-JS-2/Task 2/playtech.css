@@ -28,7 +28,6 @@ main {
 }
 
 #slide-1 {
-    /* position: relative; */
     display: none;
     background-color: #FFFFE7;
     width: 100%;
@@ -267,6 +266,19 @@ main {
     border: 1px solid black;
     border-top: none;
     margin: 0 auto;
+}
+
+.rock{
+    display: none;
+    left: -10px;
+    top: -25px;
+    position: relative;
+    margin: 0 auto;
+    border-bottom: 41px solid #F16527;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    width: 50px;
+    z-index: 1;
 }
 
 .legs:nth-child(1) {

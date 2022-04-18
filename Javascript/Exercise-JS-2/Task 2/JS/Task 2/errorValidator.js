@@ -34,4 +34,4 @@ function checkForInputErrors(name, robotType, color, phrase){
     return true;
 };
 
-// module.exports = checkForInputErrors;
+module.exports = checkForInputErrors;
