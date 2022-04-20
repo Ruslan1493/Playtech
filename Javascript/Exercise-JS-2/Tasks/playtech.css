@@ -28,7 +28,7 @@ main {
 }
 
 #slide-1 {
-    /* position: relative; */
+    /* display: none; */
     background-color: #FFFFE7;
     width: 100%;
     display: block;
@@ -176,6 +176,48 @@ main {
     display: block;
 }
 
+#robot{
+    position: relative;
+}
+
+.robot-bubble{  
+    position: absolute;
+    display: none;
+    padding: 15px;
+    top: -21px;
+    left: 182px;
+    border: 1px solid black;
+    border-radius: 50%;
+    background-color: #fff;
+    min-width: 136px;
+    height: 50px;
+    z-index: 1;
+}
+
+.robot-bubble:before,
+.robot-bubble:after {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+}
+
+.bubble:before{
+    left: 30px;
+    bottom: -50px;
+    border: 28px solid;
+    border-color: #333 transparent transparent #333;
+    transform: rotate(10deg);
+}
+
+.bubble:after{
+    left: 31px;
+    bottom: -48px;
+    border: 28px solid;
+    border-color: #fff transparent transparent #fff;
+    transform: rotate(10deg);
+}
+
 .robot-name {
     margin: 0;
     margin-bottom: 5px;
@@ -218,7 +260,7 @@ main {
     margin: 10px auto;
     border: 1px solid black;
     border-radius: 50%;
-    animation: changeMouth ease-in-out 2s infinite;
+    /* animation: changeMouth ease-in-out 2s infinite; */
 }
 
 #robot-body {
@@ -268,6 +310,19 @@ main {
     margin: 0 auto;
 }
 
+.rock{
+    display: none;
+    left: -10px;
+    top: -25px;
+    position: relative;
+    margin: 0 auto;
+    border-bottom: 41px solid #F16527;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    width: 50px;
+    z-index: 1;
+}
+
 .legs:nth-child(1) {
     left: -6px;
 }
@@ -298,6 +353,20 @@ main {
 
     100% {
         height: 4px;
+    }
+}
+
+@keyframes robotJump {
+    0% {
+        height: 47px;
+    }
+
+    40% {
+        height: 25px;
+    }
+
+    100% {
+        height: 47px;
     }
 }
 
