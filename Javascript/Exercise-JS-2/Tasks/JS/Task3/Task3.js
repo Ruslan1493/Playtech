@@ -28,7 +28,7 @@ function onSubmit(e) {
     });
     displayCanJump(options.canJump);
     displayCanTalk(options.canTalk, phrase);
-    // displayCanBlink(options.canBlink);
+    displayCanBlink(options.canBlink);
     displayRobot(robots[robots.length - 1]);
 
     name = document.querySelector(".name input").value = '';
@@ -83,14 +83,22 @@ function displayCanTalk(canTalk, phrase) {
         document.querySelector('#robot-mouth').style.animation = 'changeMouth ease-in-out 2s infinite';
         setTimeout(() => {
             document.querySelector('.robot-bubble').style.display = 'none';
-            document.querySelector('#robot-mouth').style.animation = '';  
+            document.querySelector('#robot-mouth').style.animation = '';
         }, 10000);
     } else {
         document.querySelector('.robot-bubble').style.display = 'none';
         document.querySelector('#robot-mouth').style.animation = '';
         // animation: changeMouth ease-in-out 2s infinite;
     }
-}
+};
+
+function displayCanBlink(canBlink) {
+    if (canBlink) {
+        document.querySelector('.robot-eyes').style.animation = 'robotBlink ease-in-out 2s infinite';
+    } else {
+        document.querySelector('.robot-eyes').style.animation = '';
+    }
+};
 
 function checkForInputErrors(name, robotType, color, phrase) {
     let hasError = false;
