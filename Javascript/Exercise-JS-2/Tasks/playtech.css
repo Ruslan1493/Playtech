@@ -273,6 +273,20 @@ main {
     width: 50px;
 }
 
+.slider-buttons{
+    margin: 10px;
+    display: none;
+}
+
+#previous, #next{
+    padding: 5px;
+    margin: 0 5px;
+    background-color: #F3F3F3;
+    border: 1px solid grey;
+    border-radius: 5px;
+
+}
+
 .hands {
     position: absolute;
     border: 1px solid black;
