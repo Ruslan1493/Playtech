@@ -20,7 +20,7 @@ function onSubmit(e) {
         'canTalk': false,
         'canBlink': false,
     };
-
+    let id;
     let name = document.querySelector(".name input").value;
     let robotType = document.querySelector(".select-type select").value;
     let color = document.querySelector(".select-color input").value;
@@ -34,8 +34,20 @@ function onSubmit(e) {
     if (hasError) {
         return;
     };
+
+    if(robots.length > 0){
+        console.log('last robot id = ',  robots[robots.length - 1].id)
+        id = robots[robots.length - 1].id;
+        id++;
+    }else{
+        id = 0;
+    }
+    console.log('id ', id)
+    // id = robots.length > 0 ? robots[robots.length - 1].id += 1 : 0;
+
+    console.log('index of robot ', currentRobotIndexSelected)
     robots.push({
-        name, robotType, color, phrase, options
+        name, robotType, color, phrase, options, id
     });
 
     displayRobot(robots[robots.length - 1]);
@@ -62,6 +74,7 @@ function onChangeCanTalkInput(e) {
 };
 
 function displayRobot(robot) {
+    console.log(robot)
     document.querySelector("#slide-1").style.display = 'block';
     document.querySelector(".robot-name").innerHTML = robot.name;
     if (robot.robotType == 'Male') {
@@ -149,6 +162,11 @@ function onShowCreatedRobots(e) {
         robots.forEach(robot => {
             let tr = document.createElement('tr');
             let nameTd = document.createElement('td');
+            let nameATag = document.createElement('a');
+            nameATag.innerText = robot.name;
+            nameATag.href = '/robot.id';
+            nameATag.onclick = (e) => onClickLinkRobot(e, robot.id);
+            nameTd.appendChild(nameATag);
             let typeTd = document.createElement('td');
             let colorTd = document.createElement('td');
             let optionsTd = document.createElement('td');
@@ -172,7 +190,7 @@ function onShowCreatedRobots(e) {
                 }
             });
             console.log(optionsArray)
-            nameTd.innerText = robot.name;
+
             typeTd.innerText = robot.robotType;
             colorTd.innerText = robot.color;
             optionsTd.innerText = optionsArray.join(', ');
@@ -193,7 +211,15 @@ function onShowCreatedRobots(e) {
     e.preventDefault();
 };
 
-function resetTable(){
+function onClickLinkRobot(e, id) {
+    console.log(id);
+    console.log(robots);
+
+    e.preventDefault();
+    displayRobot(robots[id]);
+};
+
+function resetTable() {
     let table = document.querySelector('.table');
     while (table.children.length > 1) {
         table.removeChild(table.lastChild);
