@@ -169,6 +169,11 @@ function onShowCreatedRobots(e) {
             nameTd.appendChild(nameATag);
             let typeTd = document.createElement('td');
             let colorTd = document.createElement('td');
+            let colorBox = document.createElement('div');
+            colorBox.id = 'robotColor';
+            colorBox.style.backgroundColor = robot.color;
+            colorTd.appendChild(colorBox);
+            //<input type="color" id="head" name="head" value="#e96126"></input>
             let optionsTd = document.createElement('td');
             const optionsArray = [];
             Object.entries(robot.options).forEach(([key, value]) => {
@@ -192,7 +197,7 @@ function onShowCreatedRobots(e) {
             console.log(optionsArray)
 
             typeTd.innerText = robot.robotType;
-            colorTd.innerText = robot.color;
+            // colorTd.innerText = robot.color;
             optionsTd.innerText = optionsArray.join(', ');
             tr.appendChild(nameTd);
             tr.appendChild(typeTd);

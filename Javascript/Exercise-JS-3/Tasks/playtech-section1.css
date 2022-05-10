@@ -274,8 +274,14 @@ main {
 }
 
 .slider-buttons{
-    margin: 10px;
+    margin: 0 auto;
     display: none;
+}
+
+.slider-buttons > div{
+    margin: 22px auto;
+    display: block;
+    width: fit-content;
 }
 
 #previous, #next{
@@ -343,6 +349,15 @@ main {
 
 .legs:nth-child(2) {
     right: -6px;
+}
+
+#robotColor{
+    display: block;
+    width: 42px;
+    height: 16px;
+    margin: 0 auto;
+    border: 1px solid black;
+    /* background-color: aqua; */
 }
 
 @keyframes fadeIn {
