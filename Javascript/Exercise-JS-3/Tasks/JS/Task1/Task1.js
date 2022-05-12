@@ -1,15 +1,6 @@
 const robots = [];
 
-// {
-//     name: "123",
-//     robotType: 'Male',
-//     color: '#fffff',
-//     options: {
-//         'canJump': true,
-//         'canTalk': true,
-//         'canBlink': true,
-//     }
-// }
+const messages = [];
 
 let currentRobotIndexSelected = 0;
 let showTalkAnimation;
@@ -30,16 +21,16 @@ function onSubmit(e) {
     });
 
     let phrase = document.querySelector(".write-comment textarea").value;
-    const hasError = checkForInputErrors(name, robotType, color, phrase, options);
+    const hasError = checkForRobotInputErrors(name, robotType, color, phrase, options);
     if (hasError) {
         return;
     };
 
-    if(robots.length > 0){
-        console.log('last robot id = ',  robots[robots.length - 1].id)
+    if (robots.length > 0) {
+        console.log('last robot id = ', robots[robots.length - 1].id)
         id = robots[robots.length - 1].id;
         id++;
-    }else{
+    } else {
         id = 0;
     }
     console.log('id ', id)
@@ -197,13 +188,11 @@ function onShowCreatedRobots(e) {
             console.log(optionsArray)
 
             typeTd.innerText = robot.robotType;
-            // colorTd.innerText = robot.color;
             optionsTd.innerText = optionsArray.join(', ');
             tr.appendChild(nameTd);
             tr.appendChild(typeTd);
             tr.appendChild(colorTd);
             tr.appendChild(optionsTd);
-            // optionsTd
             table.appendChild(tr);
         });
 
@@ -224,6 +213,16 @@ function onClickLinkRobot(e, id) {
     displayRobot(robots[id]);
 };
 
+function onClickSendMessage(){
+    const message = document.getElementById("message-input").value;
+    if(!message){
+        document.querySelector(".create-message label[name='error']").style.visibility = 'visible';
+        return;
+    }
+    document.querySelector(".create-message label[name='error']").style.visibility = 'hidden';
+
+};
+
 function resetTable() {
     let table = document.querySelector('.table');
     while (table.children.length > 1) {
@@ -231,7 +230,7 @@ function resetTable() {
     };
 };
 
-function checkForInputErrors(name, robotType, color, phrase, options) {
+function checkForRobotInputErrors(name, robotType, color, phrase, options) {
     let hasError = false;
     if (!name) {
         document.querySelector(".name label[name='error']").style.visibility = 'visible';

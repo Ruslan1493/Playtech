@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="playtech-section1.css">
-    <link rel="stylesheet" type="text/css" href="playtech-section2.css">
+    <link rel="stylesheet" type="text/css" href="CSS/playtech-section1.css">
+    <link rel="stylesheet" type="text/css" href="CSS/playtech-section2.css">
+    <link rel="stylesheet" type="text/css" href="CSS/playtech-section1-messages.css" >
+    <link rel="stylesheet" type="text/css" href="CSS/media-queries.css" >
     <script type="text/javascript" src="./JS/Task1/task1.js"></script>
     <title>Document</title>
 </head>
@@ -46,29 +48,29 @@
                 </div>
                 <div class="boxesWrapper">
                     <div class="create-message">
+                        <label class="error" name="error">Please write e message first!</label>
                         <div>
                             <label>Send message:</label>
-                            <input type="text" placeholder="write message here" />
+                            <input type="text" id="message-input" placeholder="write message here" />
                         </div>
-                        <button>Send</button>
+                        <button onclick=onClickSendMessage()>Send</button>
                     </div>
-                    <div class="messages"></div>
-                    <!-- <p id="first-paragraph" class="paragraph">Paragraph text here. Text-align on left, 3% space from
-                        right border.
-                        Text is only 2 lines and ends with 3 dots... <span class="tooltip">because it's too long.
-                            On hover full text is shown as tooltip. First letter is bold.</span>
-                    </p>
-                    <p class="paragraph">Paragraph text here. Text justified, 6% space from right border. Text is only 2
-                        lines
-                        and ends with three dots... <span class="tooltip">because it's too long. On hover full
-                            text is shown. First word is italic.
-                        </span>
-                    </p>
-
-                    <p class="paragraph"><img src="goodluck.webp" alt="goodluck" />Paragraph text here. Text-align on
-                        left, 9% space from right border. Image on
-                        left side.
-                    </p> -->
+               
+                    <div class="messages">
+                        <ul>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                        </ul>
+                    </div>
                 </div>
 
             </div>
@@ -76,9 +78,8 @@
 
         <div class="slider-buttons">
             <div>
-                <button id="previous" onclick=onClickPrevious()>
-                    < Previous</button>
-                        <button id="next" onclick=onClickNext()>Next ></button>
+                <button id="previous" onclick=onClickPrevious()>&lt; Previous</button>
+                <button id="next" onclick=onClickNext()>Next &gt;</button>
             </div>
         </div>
 
