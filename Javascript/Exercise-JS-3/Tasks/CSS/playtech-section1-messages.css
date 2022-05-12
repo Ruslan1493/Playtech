@@ -38,10 +38,12 @@
 }
 
 .messages{
+    width: 100%;
     display: block;
-    position: relative;
+    position: absolute;
     max-height: 150px;
     overflow-y: scroll;
+    right: 0px;
     box-sizing: border-box;
     bottom: -68px;
 }

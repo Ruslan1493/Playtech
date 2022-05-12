@@ -80,8 +80,9 @@ main {
 }
 
 .boxesWrapper {
+    position: relative;
     margin: 10px;
-    margin-right: 0;
+    margin-right: -25px;
     width: 65%;
 }
 
