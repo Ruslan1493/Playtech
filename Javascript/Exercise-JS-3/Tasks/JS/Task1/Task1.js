@@ -220,6 +220,14 @@ function onClickSendMessage(){
         return;
     }
     document.querySelector(".create-message label[name='error']").style.visibility = 'hidden';
+    const messageTime = Date.now();
+    // messageTime.toLocaleString('en-US', { hour12: true, hour: 'numeric', minute: 'numeric' });
+    console.log(messageTime)
+    // messages.push({
+    //     robotId: currentRobotIndexSelected,
+    //     message, 
+
+    // });
 
 };
 
