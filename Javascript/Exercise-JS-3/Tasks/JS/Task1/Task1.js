@@ -41,17 +41,18 @@ function onSubmit(e) {
         name, robotType, color, phrase, options, id
     });
 
-    displayRobot(robots[robots.length - 1]);
-
     if (robots.length > 1) {
-        currentRobotIndexSelected++;
+        currentRobotIndexSelected = id;
         document.querySelector(".slider-buttons").style.display = 'block';
     };
+
+    displayRobot(robots[robots.length - 1]);
+
 
     name = document.querySelector(".name input").value = '';
     robotType = document.querySelector(".select-type select").value = '';
     color = document.querySelector(".select-color input").value = '#F16527';
-
+    showMessages();
     e.preventDefault();
 };
 
@@ -66,6 +67,8 @@ function onChangeCanTalkInput(e) {
 
 function displayRobot(robot) {
     console.log(robot)
+    showMessages();
+
     document.querySelector("#slide-1").style.display = 'block';
     document.querySelector(".robot-name").innerHTML = robot.name;
     if (robot.robotType == 'Male') {
@@ -80,7 +83,6 @@ function displayRobot(robot) {
     displayCanBlink(robot.options.canBlink);
     displayCanJump(robot.options.canJump);
     displayCanTalk(robot.options.canTalk, robot.phrase);
-
     return;
 };
 
@@ -126,26 +128,31 @@ function displayCanBlink(canBlink) {
 function onClickPrevious() {
     if (currentRobotIndexSelected - 1 >= 0) {
         currentRobotIndexSelected--;
+        console.log('current index: ', currentRobotIndexSelected);
         displayRobot(robots[currentRobotIndexSelected]);
         return;
     };
     currentRobotIndexSelected = robots.length - 1;
+    console.log('current index: ', currentRobotIndexSelected);
     displayRobot(robots[robots.length - 1]);
+    // showMessages();
 };
 
 function onClickNext() {
     if (currentRobotIndexSelected + 1 <= robots.length - 1) {
         currentRobotIndexSelected++;
+        console.log('current index: ', currentRobotIndexSelected);
         displayRobot(robots[currentRobotIndexSelected]);
         return;
     };
     currentRobotIndexSelected = 0;
+    console.log('current index: ', currentRobotIndexSelected);
     displayRobot(robots[0]);
+    // showMessages();
 };
 
 function onShowCreatedRobots(e) {
     resetTable();
-
     if (robots.length > 0) {
         document.querySelector('#has-robot-counter').innerHTML = `${robots.length} robots found`;
         document.querySelector('.table').style.visibility = 'visible';
@@ -195,6 +202,7 @@ function onShowCreatedRobots(e) {
             tr.appendChild(optionsTd);
             table.appendChild(tr);
         });
+        showMessages();
 
         return;
     }
@@ -211,24 +219,31 @@ function onClickLinkRobot(e, id) {
 
     e.preventDefault();
     displayRobot(robots[id]);
+    // showMessages();
 };
 
-function onClickSendMessage(){
-    const message = document.getElementById("message-input").value;
-    if(!message){
+function onClickSendMessage() {
+    let message = document.getElementById("message-input").value;
+    if (!message) {
         document.querySelector(".create-message label[name='error']").style.visibility = 'visible';
         return;
     }
     document.querySelector(".create-message label[name='error']").style.visibility = 'hidden';
-    const messageTime = Date.now();
-    // messageTime.toLocaleString('en-US', { hour12: true, hour: 'numeric', minute: 'numeric' });
-    console.log(messageTime)
-    // messages.push({
-    //     robotId: currentRobotIndexSelected,
-    //     message, 
-
-    // });
-
+    const currentTime = new Date();
+    const timeWithPmAm = currentTime.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+    const currentRobotsIds = [];
+    robots.forEach(robot => currentRobotsIds.push(robot.id));
+    messages.push({
+        currentRobotsIds,
+        creatorId: currentRobotIndexSelected,
+        message,
+        time: timeWithPmAm
+    });
+    document.getElementById("message-input").value = '';
+    showMessages();
 };
 
 function resetTable() {
@@ -236,6 +251,36 @@ function resetTable() {
     while (table.children.length > 1) {
         table.removeChild(table.lastChild);
     };
+};
+
+function showMessages() {
+    let messagesSelector = document.querySelector(".messages ul");
+    messagesSelector.innerHTML = '';
+    const messageReversed = [...messages];
+    messageReversed.reverse();
+    messageReversed.forEach(messageInfo => {
+        if (messageInfo.currentRobotsIds.includes(currentRobotIndexSelected)) {
+            console.log(' robots ids: ' + messageInfo.currentRobotsIds)
+            console.log(' current index is : ' + currentRobotIndexSelected)
+            const li = document.createElement("li");
+            const firstParagraph = document.createElement("p");
+            const secondParagraph = document.createElement("p");
+            const robotName = document.createElement("span");
+            robotName.innerText = robots[messageInfo.creatorId].name;
+            robotName.style.color = robots[messageInfo.creatorId].color;
+
+            firstParagraph.append(robotName);
+            firstParagraph.append(' ' + messageInfo.time);
+            secondParagraph.innerText = messageInfo.message;
+            li.appendChild(firstParagraph);
+            li.appendChild(secondParagraph);
+            messagesSelector = document.querySelector(".messages ul");
+            messagesSelector.appendChild(li);
+        };
+        // return;
+    });
+    // messages.reverse();
+
 };
 
 function checkForRobotInputErrors(name, robotType, color, phrase, options) {

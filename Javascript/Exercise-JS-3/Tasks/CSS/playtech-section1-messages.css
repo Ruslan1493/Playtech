@@ -51,3 +51,7 @@
 .messages ul::-webkit-scrollbar {
     width: 10px;
 }
+
+.messages ul li {
+    list-style-type: none;
+}
