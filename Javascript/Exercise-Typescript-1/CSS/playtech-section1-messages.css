@@ -1,0 +1,57 @@
+.create-message {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.create-message div {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+}
+
+.create-message div label {
+    padding: 5px 10px;
+}
+
+.create-message div input {
+    min-width: 70%;
+}
+
+.create-message button {
+    margin: 5px 0;
+    padding: 5px 15px;
+    display: block;
+    max-width: 66px;
+    border: 1px solid black;
+    border-radius: 5px;
+    align-self: end;
+}
+
+.create-message button::placeholder {
+    color: black;
+}
+
+.create-message label[name='error'] {
+    padding: 5px;
+    text-align: center;
+}
+
+.messages{
+    width: 100%;
+    display: block;
+    position: absolute;
+    max-height: 150px;
+    overflow-y: scroll;
+    right: 0px;
+    box-sizing: border-box;
+    bottom: -68px;
+}
+
+.messages ul::-webkit-scrollbar {
+    width: 10px;
+}
+
+.messages ul li {
+    list-style-type: none;
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="CSS/playtech-section1.css">
+    <link rel="stylesheet" type="text/css" href="CSS/playtech-section2.css">
+    <link rel="stylesheet" type="text/css" href="CSS/playtech-section1-messages.css">
+    <link rel="stylesheet" type="text/css" href="CSS/media-queries.css">
+    <script type="text/javascript" src="./JS/Task1/task1.js"></script>
+    <title>Document</title>
+</head>
+
+
+<body>
+    <main class="main">
+        <header class="header">
+            <p>Robot factory</p>
+            <a href="https://www.playtech.com">
+                <img src="./pl2.jpg" alt="playtech" />
+            </a>
+        </header>
+        <section id="slide-1" class="factory-section">
+            <p class="factory-header">Basic Robot</p>
+            <div class="content-wrapper">
+                <div class="robotWrapper">
+                    <div id="robot">
+                        <p class="robot-bubble bubble"></p>
+                        <div id="robot-head">
+                            <div class="robot-eyes"></div>
+                            <div class="robot-eyes"></div>
+                            <div id="robot-mouth"></div>
+                        </div>
+                        <div id="robot-body">
+                            <div class="hands"></div>
+                            <div class="hands"></div>
+                            <div class="rock"></div>
+                        </div>
+                        <div id="robot-legs">
+                            <div class="legs"></div>
+                            <div class="legs"></div>
+                        </div>
+                    </div>
+                    <p class="robot-name">Robot name</p>
+
+                </div>
+                <div class="boxesWrapper">
+                    <div class="create-message">
+                        <label class="error" name="error">Please write e message first!</label>
+                        <div>
+                            <label>Send message:</label>
+                            <input type="text" id="message-input" placeholder="write message here" />
+                        </div>
+                        <button onclick=onClickSendMessage()>Send</button>
+                    </div>
+
+                    <div class="messages">
+                        <ul>
+                            <!-- <li>Robot1: Hello</li>
+                            <li>
+                                <p>Robot1 time</p>
+                                <p>Hello world</p>
+                            </li> -->
+                            <!-- <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li>
+                            <li>Robot1: Hello</li> -->
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="slider-buttons">
+            <div>
+                <button id="previous" onclick=onClickPrevious()>&lt; Previous</button>
+                <button id="next" onclick=onClickNext()>Next &gt;</button>
+            </div>
+        </div>
+
+        <section id="slide-2" class="form-section">
+            <h2>Create Robot</h2>
+            <div class="form-wrapper">
+                <div class="name">
+                    <label class="error" name="error">Please fill the name</label>
+                    <label>Name</label>
+                    <input type="text" placeholder="Robot name" />
+                </div>
+                <div class="select-type">
+                    <label class="error" name="error">Please select a type</label>
+                    <label>Select type</label>
+                    <select>
+                        <option></option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+                <div class="select-color">
+                    <label class="error" name="error">Please select a color </label>
+                    <label>Select color</label>
+                    <input type="color" id="head" name="head" value="#e96126">
+                </div>
+                <div class="select-option">
+                    <label>Select options</label>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="canJump" checked />
+                        <label>can jump</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="canTalk" checked onchange=onChangeCanTalkInput() />
+                        <label>can talk</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="canBlink" checked />
+                        <label>can blink</label>
+                    </div>
+                </div>
+                <div class="write-comment">
+                    <label class="error" name="error">Please write a phrase</label>
+                    <label>Write phrase</label>
+                    <textarea placeholder="text area"></textarea>
+                </div>
+            </div>
+            <div class="buttons">
+                <button onclick=onSubmit(event)>Create</button>
+                <button onclick=onShowCreatedRobots(event)>Show created robots</button>
+                <div></div>
+            </div>
+            <div id="table-section">
+                <h2 id="has-robot-counter">No robots created yet</h2>
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Color</th>
+                        <th>Options</th>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

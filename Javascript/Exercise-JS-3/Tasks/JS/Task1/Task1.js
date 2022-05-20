@@ -17,6 +17,9 @@ function onSubmit(e) {
     let color = document.querySelector(".select-color input").value;
 
     document.querySelectorAll(".checkbox-wrapper input").forEach(input => {
+        console.log(input.id)
+        console.log(typeof input.id)
+
         input.checked ? options[input.id] = true : options[input.id] = false;
     });
 
