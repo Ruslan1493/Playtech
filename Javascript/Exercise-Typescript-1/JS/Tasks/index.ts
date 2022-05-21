@@ -1,11 +1,12 @@
-import { Robot, OptionsObjectKey, Options } from './types';
+import { Robot, OptionsObjectKey, Options, Message } from './types';
+import 'core-js/es/object/from-entries';
 
 const robots: Robot[] = [];
 
-const messages: string[] = [];
+const messages: Message[] = [];
 
 let currentRobotIndexSelected: number = 0;
-let showTalkAnimation: any;
+let showTalkAnimation: number;
 
 
 function onSubmit(e: any): void {
@@ -96,12 +97,12 @@ function displayRobot(robot: Robot): void {
 function displayCanJump(canJump: boolean): void {
     const robotLegs: HTMLElement[] | null = Array.from(document.querySelectorAll('.legs'));
     if (canJump) {
-        robotLegs.forEach(el => {
+        robotLegs.forEach((el: HTMLElement) => {
             el.style.animation = 'robotJump ease-out 2s infinite';
         });
         return;
     }
-    robotLegs.forEach(el => {
+    robotLegs.forEach((el: HTMLElement) => {
         el.style.animation = '';
     });
 };
@@ -158,12 +159,12 @@ function onClickNext(): void {
     // showMessages();
 };
 
-function onShowCreatedRobots(e: any): void {
+function onShowCreatedRobots(e: Event): void {
     resetTable();
     if (robots.length > 0) {
         (<HTMLElement>document.querySelector('#has-robot-counter')).innerHTML = `${robots.length} robots found`;
         (<HTMLElement>document.querySelector('.table')).style.visibility = 'visible';
-        let table: HTMLTableElement = document.querySelector('.table');
+        let table: HTMLTableElement = <HTMLTableElement>document.querySelector('.table');
         robots.forEach((robot: Robot) => {
             let tr: HTMLElement = document.createElement('tr');
             let nameTd: HTMLElement = document.createElement('td');
@@ -180,8 +181,8 @@ function onShowCreatedRobots(e: any): void {
             colorTd.appendChild(colorBox);
             //<input type="color" id="head" name="head" value="#e96126"></input>
             let optionsTd: HTMLElement = document.createElement('td');
-            const optionsArray: [] = [];
-            Object.entries(robot.options).forEach(([key, value]) => {
+            const optionsArray: string[] = [];
+            Object.entries({ a: 1 }).forEach(([key, value]) => {
                 if (value) {
                     switch (key) {
                         case 'canJump':
@@ -214,13 +215,13 @@ function onShowCreatedRobots(e: any): void {
         return;
     }
 
-    document.querySelector('#has-robot-counter').innerHTML = 'No robots created yet';
-    document.querySelector('.table').style.visibility = 'hidden';
+    (<HTMLElement>document.querySelector('#has-robot-counter')).innerHTML = 'No robots created yet';
+    (<HTMLTableElement>document.querySelector('.table')).style.visibility = 'hidden';
 
     e.preventDefault();
 };
 
-function onClickLinkRobot(e, id) {
+function onClickLinkRobot(e: Event, id: number): void {
     console.log(id);
     console.log(robots);
 
@@ -229,50 +230,50 @@ function onClickLinkRobot(e, id) {
     // showMessages();
 };
 
-function onClickSendMessage() {
-    let message = document.getElementById("message-input").value;
+function onClickSendMessage(): void {
+    let message: string = (<HTMLInputElement>document.getElementById("message-input")).value;
     if (!message) {
-        document.querySelector(".create-message label[name='error']").style.visibility = 'visible';
+        (<HTMLElement>document.querySelector(".create-message label[name='error']")).style.visibility = 'visible';
         return;
     }
-    document.querySelector(".create-message label[name='error']").style.visibility = 'hidden';
-    const currentTime = new Date();
-    const timeWithPmAm = currentTime.toLocaleTimeString('en-US', {
+    (<HTMLElement>document.querySelector(".create-message label[name='error']")).style.visibility = 'hidden';
+    const currentTime: Date = new Date();
+    const timeWithPmAm: string = currentTime.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
     });
-    const currentRobotsIds = [];
-    robots.forEach(robot => currentRobotsIds.push(robot.id));
+    const currentRobotsIds: number[] = [];
+    robots.forEach((robot: Robot) => currentRobotsIds.push(robot.id));
     messages.push({
         currentRobotsIds,
         creatorId: currentRobotIndexSelected,
         message,
         time: timeWithPmAm
     });
-    document.getElementById("message-input").value = '';
+    (<HTMLInputElement>document.getElementById("message-input")).value = '';
     showMessages();
 };
 
-function resetTable() {
-    let table = document.querySelector('.table');
+function resetTable(): void {
+    let table: HTMLTableElement = <HTMLTableElement>document.querySelector('.table');
     while (table.children.length > 1) {
-        table.removeChild(table.lastChild);
+        table.removeChild(<ChildNode>table.lastChild);
     };
 };
 
-function showMessages() {
-    let messagesSelector = document.querySelector(".messages ul");
+function showMessages(): void {
+    let messagesSelector: HTMLUListElement = (<HTMLUListElement>document.querySelector(".messages ul"));
     messagesSelector.innerHTML = '';
-    const messageReversed = [...messages];
+    const messageReversed: Message[] = [...messages];
     messageReversed.reverse();
-    messageReversed.forEach(messageInfo => {
+    messageReversed.forEach((messageInfo: Message) => {
         if (messageInfo.currentRobotsIds.includes(currentRobotIndexSelected)) {
             console.log(' robots ids: ' + messageInfo.currentRobotsIds)
             console.log(' current index is : ' + currentRobotIndexSelected)
-            const li = document.createElement("li");
-            const firstParagraph = document.createElement("p");
-            const secondParagraph = document.createElement("p");
-            const robotName = document.createElement("span");
+            const li: HTMLLIElement = document.createElement("li");
+            const firstParagraph: HTMLParagraphElement = document.createElement("p");
+            const secondParagraph: HTMLParagraphElement = document.createElement("p");
+            const robotName: HTMLSpanElement = document.createElement("span");
             robotName.innerText = robots[messageInfo.creatorId].name;
             robotName.style.color = robots[messageInfo.creatorId].color;
 
@@ -281,43 +282,40 @@ function showMessages() {
             secondParagraph.innerText = messageInfo.message;
             li.appendChild(firstParagraph);
             li.appendChild(secondParagraph);
-            messagesSelector = document.querySelector(".messages ul");
+            messagesSelector = (<HTMLUListElement>document.querySelector(".messages ul"));
             messagesSelector.appendChild(li);
         };
-        // return;
     });
-    // messages.reverse();
-
 };
 
-function checkForRobotInputErrors(name, robotType, color, phrase, options) {
-    let hasError = false;
+function checkForRobotInputErrors(name: string, robotType: string, color: string, phrase: string, options: Options): boolean {
+    let hasError: boolean = false;
     if (!name) {
-        document.querySelector(".name label[name='error']").style.visibility = 'visible';
+        (<HTMLLabelElement>document.querySelector(".name label[name='error']")).style.visibility = 'visible';
         hasError = true;
     } else {
-        document.querySelector(".name label[name='error']").style.visibility = 'hidden';
+        (<HTMLLabelElement>document.querySelector(".name label[name='error']")).style.visibility = 'hidden';
     }
 
     if (!robotType) {
-        document.querySelector(".select-type label[name='error']").style.visibility = 'visible';
+        (<HTMLLabelElement>document.querySelector(".select-type label[name='error']")).style.visibility = 'visible';
         hasError = true;
     } else {
-        document.querySelector(".select-type label[name='error']").style.visibility = 'hidden';
+        (<HTMLLabelElement>document.querySelector(".select-type label[name='error']")).style.visibility = 'hidden';
     }
 
     if (!color) {
-        document.querySelector(".select-color label[name='error']").style.visibility = 'visible';
+        (<HTMLLabelElement>document.querySelector(".select-color label[name='error']")).style.visibility = 'visible';
         hasError = true;
     } else {
-        document.querySelector(".select-color label[name='error']").style.visibility = 'hidden';
+        (<HTMLLabelElement>document.querySelector(".select-color label[name='error']")).style.visibility = 'hidden';
     }
 
     if (!phrase && options.canTalk) {
-        document.querySelector(".write-comment label[name='error']").style.visibility = 'visible';
+        (<HTMLLabelElement>document.querySelector(".write-comment label[name='error']")).style.visibility = 'visible';
         hasError = true;
     } else {
-        document.querySelector(".write-comment label[name='error']").style.visibility = 'hidden';
+        (<HTMLLabelElement>document.querySelector(".write-comment label[name='error']")).style.visibility = 'hidden';
     }
 
     if (!hasError) {

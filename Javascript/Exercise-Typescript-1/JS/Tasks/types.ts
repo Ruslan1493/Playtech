@@ -15,7 +15,14 @@ interface Options {
     canJump: boolean,
     canTalk: boolean,
     canBlink: boolean,
-}
+};
+
+interface Message {
+    currentRobotsIds: number[],
+    creatorId: number,
+    message: string,
+    time: string
+};
 
 let options: Options = {
     canJump: false,
@@ -25,4 +32,4 @@ let options: Options = {
 
 type OptionsObjectKey = keyof typeof options;
 
-export { Robot, Options, OptionsObjectKey };
+export { Robot, Options, OptionsObjectKey, Message };
