@@ -1,13 +1,75 @@
-import { Robot, OptionsObjectKey, Options, Message } from './types';
-import 'core-js/es/object/from-entries';
+// import { Robot, OptionsObjectKey, Options, Message } from './types';
+// import 'core-js/es/object/from-entries';
 
-const robots: Robot[] = [];
+enum RobotType {
+    MALE = "Male",
+    FEMALE = "Female"
+}
+
+interface Robot {
+    name: string,
+    robotType: RobotType,
+    color: string,
+    phrase: string,
+    id: number,
+    options: {
+        'canJump': boolean,
+        'canTalk': boolean,
+        'canBlink': boolean,
+    }
+};
+
+interface Options {
+    canJump: boolean,
+    canTalk: boolean,
+    canBlink: boolean,
+};
+
+interface Message {
+    currentRobotsIds: number[],
+    creatorId: number,
+    message: string,
+    time: string
+};
+
+let options: Options = {
+    canJump: false,
+    canTalk: false,
+    canBlink: false,
+};
+
+type OptionsObjectKey = keyof typeof options;
+
+let robots: Robot[] = [];
 
 const messages: Message[] = [];
-
 let currentRobotIndexSelected: number = 0;
 let showTalkAnimation: number;
 
+
+function checkForRobots(): void {
+    if (localStorage.length >= 1) {
+        robots = JSON.parse(<string>localStorage.getItem('robots'));
+        console.log('Robots check inside local', robots);
+        displayRobot(robots[0]);
+        showSliderButtons(0);
+    };
+};
+
+function addRobotToLocalStorage(robot: Robot): void {
+    if (!localStorage.getItem('robots')) {
+        // const arr = [robot];
+        localStorage.setItem('robots', JSON.stringify([robot]));
+        return;
+    };
+    let localStorageRobots = JSON.parse(<string>localStorage.getItem('robots'));
+    localStorageRobots.push(robot);
+    // console.log('type of localStorageRobots ', typeof localStorageRobots);
+    // console.log('type of json parse  ', typeof JSON.parse(<string>localStorage.getItem('robots')));
+    // console.log('json parse  val', JSON.parse(<string>localStorage.getItem('robots')));
+    localStorage.setItem('robots', JSON.stringify(localStorageRobots));
+    console.log('Robots ', localStorageRobots);
+};
 
 function onSubmit(e: any): void {
     let options: Options = {
@@ -18,9 +80,9 @@ function onSubmit(e: any): void {
     let id: number;
 
     let name: string = (<HTMLInputElement>document.querySelector(".name input")).value;
-    let robotType: string = (<HTMLInputElement>document.querySelector(".select-type select")).value;
+    let robotTypeValue: string = (<HTMLInputElement>document.querySelector(".select-type select")).value;
     let color: string = (<HTMLInputElement>document.querySelector(".select-color input")).value;
-
+    const robotType: RobotType = robotTypeValue === 'Male' ? RobotType.MALE : RobotType.FEMALE;
     let checkboxElement: HTMLInputElement[] = Array.from(document.querySelectorAll(".checkbox-wrapper input"));
 
     checkboxElement.forEach((input: HTMLInputElement, i: number) => {
@@ -29,7 +91,7 @@ function onSubmit(e: any): void {
     });
 
     let phrase: string = (<HTMLInputElement>document.querySelector(".write-comment textarea")).value;
-    const hasError: boolean = checkForRobotInputErrors(name, robotType, color, phrase, options);
+    const hasError: boolean = checkForRobotInputErrors(name, robotTypeValue, color, phrase, options);
     if (hasError) {
         return;
     };
@@ -49,16 +111,18 @@ function onSubmit(e: any): void {
         name, robotType, color, phrase, options, id
     });
 
-    if (robots.length > 1) {
-        currentRobotIndexSelected = id;
-        (<HTMLDivElement>document.querySelector(".slider-buttons")).style.display = 'block';
-    };
+    addRobotToLocalStorage({
+        name, robotType, color, phrase, options, id
+    });
+
+    showSliderButtons(id);
 
     displayRobot(robots[robots.length - 1]);
 
 
+
     name = (<HTMLInputElement>document.querySelector(".name input")).value = '';
-    robotType = (<HTMLInputElement>document.querySelector(".select-type select")).value = '';
+    robotTypeValue = (<HTMLInputElement>document.querySelector(".select-type select")).value = '';
     color = (<HTMLInputElement>document.querySelector(".select-color input")).value = '#F16527';
     showMessages();
     e.preventDefault();
@@ -182,7 +246,7 @@ function onShowCreatedRobots(e: Event): void {
             //<input type="color" id="head" name="head" value="#e96126"></input>
             let optionsTd: HTMLElement = document.createElement('td');
             const optionsArray: string[] = [];
-            Object.entries({ a: 1 }).forEach(([key, value]) => {
+            Object.entries(robot.options).forEach(([key, value]) => {
                 if (value) {
                     switch (key) {
                         case 'canJump':
@@ -288,6 +352,13 @@ function showMessages(): void {
     });
 };
 
+function showSliderButtons(id: number): void {
+    if (robots.length > 1) {
+        currentRobotIndexSelected = id;
+        (<HTMLDivElement>document.querySelector(".slider-buttons")).style.display = 'block';
+    };
+}
+
 function checkForRobotInputErrors(name: string, robotType: string, color: string, phrase: string, options: Options): boolean {
     let hasError: boolean = false;
     if (!name) {
@@ -323,3 +394,5 @@ function checkForRobotInputErrors(name: string, robotType: string, color: string
     }
     return true;
 };
+
+checkForRobots();
