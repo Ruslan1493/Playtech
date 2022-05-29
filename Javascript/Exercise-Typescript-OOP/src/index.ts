@@ -1,50 +1,45 @@
-// import { Robot, OptionsObjectKey, Options, Message } from './types';
+import { Robot, OptionsObjectKey, Options, Message, RobotType } from './types.js';
 // import 'core-js/es/object/from-entries';
 
-enum RobotType {
-    MALE = "Male",
-    FEMALE = "Female"
-}
+// interface Robot {
+//     name: string,
+//     robotType: RobotType,
+//     color: string,
+//     phrase: string,
+//     id: number,
+//     options: {
+//         'canJump': boolean,
+//         'canTalk': boolean,
+//         'canBlink': boolean,
+//     }
+// };
 
-interface Robot {
-    name: string,
-    robotType: RobotType,
-    color: string,
-    phrase: string,
-    id: number,
-    options: {
-        'canJump': boolean,
-        'canTalk': boolean,
-        'canBlink': boolean,
-    }
-};
+// interface Options {
+//     canJump: boolean,
+//     canTalk: boolean,
+//     canBlink: boolean,
+// };
 
-interface Options {
-    canJump: boolean,
-    canTalk: boolean,
-    canBlink: boolean,
-};
+// interface Message {
+//     currentRobotsIds: number[],
+//     creatorId: number,
+//     message: string,
+//     time: string
+// };
 
-interface Message {
-    currentRobotsIds: number[],
-    creatorId: number,
-    message: string,
-    time: string
-};
+// let options: Options = {
+//     canJump: false,
+//     canTalk: false,
+//     canBlink: false,
+// };
 
-let options: Options = {
-    canJump: false,
-    canTalk: false,
-    canBlink: false,
-};
-
-type OptionsObjectKey = keyof typeof options;
+// type OptionsObjectKey = keyof typeof options;
 
 let robots: Robot[] = [];
 
 const messages: Message[] = [];
 let currentRobotIndexSelected: number = 0;
-let showTalkAnimation: number;
+let showTalkAnimation: any;
 
 
 function checkForRobots(): void {
@@ -413,3 +408,24 @@ function checkForRobotInputErrors(name: string, robotType: string, color: string
 };
 
 checkForRobots();
+
+
+//onclick=onClickSendMessage()
+(<HTMLButtonElement>document.querySelector("#sendMessageBtn")).addEventListener('click', onClickSendMessage);
+// onclick=onClickPrevious()
+(<HTMLButtonElement>document.querySelector("#previous")).addEventListener('click', onClickPrevious);
+// onclick=onClickNext()
+(<HTMLButtonElement>document.querySelector("#next")).addEventListener('click', onClickNext);
+// onclick=onSubmit(event)
+(<HTMLButtonElement>document.querySelector("#onSubmitBtn")).addEventListener('click', onSubmit);
+// onclick=onShowCreatedRobots(event)
+(<HTMLButtonElement>document.querySelector("#showCreatedRobotsBtn")).addEventListener('click', onShowCreatedRobots);
+// onclick=onClearLocalStorage(event)
+(<HTMLButtonElement>document.querySelector(".clearLocalStorageBtn")).addEventListener('click', onClearLocalStorage);
+// onchange=onChangeCanTalkInput() 
+(<HTMLButtonElement>document.querySelector("#canTalk")).addEventListener('check', onChangeCanTalkInput);
+
+
+
+
+

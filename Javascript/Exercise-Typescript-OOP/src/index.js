@@ -1,19 +1,34 @@
-"use strict";
-// import { Robot, OptionsObjectKey, Options, Message } from './types';
+import { RobotType } from './types.js';
 // import 'core-js/es/object/from-entries';
-var RobotType;
-(function (RobotType) {
-    RobotType["MALE"] = "Male";
-    RobotType["FEMALE"] = "Female";
-})(RobotType || (RobotType = {}));
-;
-;
-;
-let options = {
-    canJump: false,
-    canTalk: false,
-    canBlink: false,
-};
+// interface Robot {
+//     name: string,
+//     robotType: RobotType,
+//     color: string,
+//     phrase: string,
+//     id: number,
+//     options: {
+//         'canJump': boolean,
+//         'canTalk': boolean,
+//         'canBlink': boolean,
+//     }
+// };
+// interface Options {
+//     canJump: boolean,
+//     canTalk: boolean,
+//     canBlink: boolean,
+// };
+// interface Message {
+//     currentRobotsIds: number[],
+//     creatorId: number,
+//     message: string,
+//     time: string
+// };
+// let options: Options = {
+//     canJump: false,
+//     canTalk: false,
+//     canBlink: false,
+// };
+// type OptionsObjectKey = keyof typeof options;
 let robots = [];
 const messages = [];
 let currentRobotIndexSelected = 0;
@@ -372,3 +387,18 @@ function checkForRobotInputErrors(name, robotType, color, phrase, options) {
 }
 ;
 checkForRobots();
+//onclick=onClickSendMessage()
+document.querySelector("#sendMessageBtn").addEventListener('click', onClickSendMessage);
+// onclick=onClickPrevious()
+document.querySelector("#previous").addEventListener('click', onClickPrevious);
+// onclick=onClickNext()
+document.querySelector("#next").addEventListener('click', onClickNext);
+// onclick=onSubmit(event)
+document.querySelector("#onSubmitBtn").addEventListener('click', onSubmit);
+// onclick=onShowCreatedRobots(event)
+document.querySelector("#showCreatedRobotsBtn").addEventListener('click', onShowCreatedRobots);
+// onclick=onClearLocalStorage(event)
+document.querySelector(".clearLocalStorageBtn").addEventListener('click', onClearLocalStorage);
+// onchange=onChangeCanTalkInput() 
+document.querySelector("#canTalk").addEventListener('check', onChangeCanTalkInput);
+//# sourceMappingURL=index.js.map

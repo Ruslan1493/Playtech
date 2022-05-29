@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="CSS/playtech-section1.css">
     <link rel="stylesheet" type="text/css" href="CSS/playtech-section2.css">
@@ -12,12 +12,12 @@
     <!-- <script>var exports = {};</script> -->
 
     <!-- <script src="core-js/es/object/from-entries"></script> -->
-    <script type="text/javascript" src="./build/index.js" defer></script>
     <title>Document</title>
 </head>
 
 
 <body>
+    <script type="module" src="bundle.js" defer></script>
     <main class="main">
         <header class="header">
             <p>Robot factory</p>
@@ -56,7 +56,7 @@
                             <label>Send message:</label>
                             <input type="text" id="message-input" placeholder="write message here" />
                         </div>
-                        <button onclick=onClickSendMessage()>Send</button>
+                        <button id="sendMessageBtn">Send</button>
                     </div>
 
                     <div class="messages">
@@ -73,8 +73,8 @@
 
         <div class="slider-buttons">
             <div>
-                <button id="previous" onclick=onClickPrevious()>&lt; Previous</button>
-                <button id="next" onclick=onClickNext()>Next &gt;</button>
+                <button id="previous">&lt; Previous</button>
+                <button id="next">Next &gt;</button>
             </div>
         </div>
 
@@ -107,7 +107,7 @@
                         <label>can jump</label>
                     </div>
                     <div class="checkbox-wrapper">
-                        <input type="checkbox" id="canTalk" checked onchange=onChangeCanTalkInput() />
+                        <input type="checkbox" id="canTalk" checked/>
                         <label>can talk</label>
                     </div>
                     <div class="checkbox-wrapper">
@@ -122,9 +122,9 @@
                 </div>
             </div>
             <div class="buttons">
-                <button onclick=onSubmit(event)>Create</button>
-                <button onclick=onShowCreatedRobots(event)>Show created robots</button>
-                <button class="clearLocalStorageBtn" onclick=onClearLocalStorage(event)>Delete all robots</button>
+                <button id="onSubmitBtn">Create</button>
+                <button id="showCreatedRobotsBtn">Show created robots</button>
+                <button class="clearLocalStorageBtn">Delete all robots</button>
                 <div></div>
             </div>
             <div id="table-section">
