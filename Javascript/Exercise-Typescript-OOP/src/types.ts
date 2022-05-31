@@ -3,7 +3,7 @@ enum RobotType {
     FEMALE = "Female"
 };
 
-interface Robot {
+interface IRobot {
     name: string,
     robotType: RobotType,
     color: string,
@@ -37,4 +37,4 @@ let options: Options = {
 
 type OptionsObjectKey = keyof typeof options;
 
-export { Robot, Options, OptionsObjectKey, Message, RobotType };
+export { IRobot, Options, OptionsObjectKey, Message, RobotType };

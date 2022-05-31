@@ -1,65 +1,22 @@
 import { RobotType } from './types.js';
+import checkForRobotInputErrors from './errorHandling.js';
+import Robot from './RobotModel.js';
 // import 'core-js/es/object/from-entries';
-// interface Robot {
-//     name: string,
-//     robotType: RobotType,
-//     color: string,
-//     phrase: string,
-//     id: number,
-//     options: {
-//         'canJump': boolean,
-//         'canTalk': boolean,
-//         'canBlink': boolean,
-//     }
-// };
-// interface Options {
-//     canJump: boolean,
-//     canTalk: boolean,
-//     canBlink: boolean,
-// };
-// interface Message {
-//     currentRobotsIds: number[],
-//     creatorId: number,
-//     message: string,
-//     time: string
-// };
-// let options: Options = {
-//     canJump: false,
-//     canTalk: false,
-//     canBlink: false,
-// };
-// type OptionsObjectKey = keyof typeof options;
-let robots = [];
+// let robots: IRobot[] = [];
 const messages = [];
-let currentRobotIndexSelected = 0;
+// let currentRobotIndexSelected: number = 0;
 let showTalkAnimation;
 function checkForRobots() {
     if (localStorage.length >= 1) {
-        robots = JSON.parse(localStorage.getItem('robots'));
-        console.log('Robots check inside local', robots);
-        displayRobot(robots[0]);
+        Robot.replaceCurrentRobots(JSON.parse(localStorage.getItem('robots')));
+        // console.log('Robots check inside local', robots);
+        displayRobot(Robot.getRobots()[0]);
         showSliderButtons(0);
         document.querySelector(".clearLocalStorageBtn").style.display = 'inline-block';
         return;
     }
     ;
     document.querySelector(".clearLocalStorageBtn").style.display = 'none';
-}
-;
-function addRobotToLocalStorage(robot) {
-    if (!localStorage.getItem('robots')) {
-        // const arr = [robot];
-        localStorage.setItem('robots', JSON.stringify([robot]));
-        return;
-    }
-    ;
-    let localStorageRobots = JSON.parse(localStorage.getItem('robots'));
-    localStorageRobots.push(robot);
-    // console.log('type of localStorageRobots ', typeof localStorageRobots);
-    // console.log('type of json parse  ', typeof JSON.parse(<string>localStorage.getItem('robots')));
-    // console.log('json parse  val', JSON.parse(<string>localStorage.getItem('robots')));
-    localStorage.setItem('robots', JSON.stringify(localStorageRobots));
-    console.log('Robots ', localStorageRobots);
 }
 ;
 function onSubmit(e) {
@@ -84,9 +41,9 @@ function onSubmit(e) {
         return;
     }
     ;
-    if (robots.length > 0) {
-        console.log('last robot id = ', robots[robots.length - 1].id);
-        id = robots[robots.length - 1].id;
+    if (Robot.getRobots().length > 0) {
+        console.log('last robot id = ', Robot.getRobots()[Robot.getRobots().length - 1].id);
+        id = Robot.getRobots()[Robot.getRobots().length - 1].id;
         id++;
     }
     else {
@@ -95,19 +52,42 @@ function onSubmit(e) {
     // console.log('id ', id)
     // id = robots.length > 0 ? robots[robots.length - 1].id += 1 : 0;
     // console.log('index of robot ', currentRobotIndexSelected)
-    robots.push({
+    Robot.addRobot({
         name, robotType, color, phrase, options, id
     });
     addRobotToLocalStorage({
         name, robotType, color, phrase, options, id
     });
     showSliderButtons(id);
-    displayRobot(robots[robots.length - 1]);
+    displayRobot(Robot.getRobots()[Robot.getRobots().length - 1]);
     name = document.querySelector(".name input").value = '';
     robotTypeValue = document.querySelector(".select-type select").value = '';
     color = document.querySelector(".select-color input").value = '#F16527';
     showMessages();
     e.preventDefault();
+}
+;
+function showSliderButtons(id) {
+    if (Robot.getRobots().length > 1) {
+        Robot.setCurrentRobotIndexSelected(id);
+        document.querySelector(".slider-buttons").style.display = 'block';
+    }
+    ;
+}
+function addRobotToLocalStorage(robot) {
+    if (!localStorage.getItem('robots')) {
+        // const arr = [robot];
+        localStorage.setItem('robots', JSON.stringify([robot]));
+        return;
+    }
+    ;
+    let localStorageRobots = JSON.parse(localStorage.getItem('robots'));
+    localStorageRobots.push(robot);
+    // console.log('type of localStorageRobots ', typeof localStorageRobots);
+    // console.log('type of json parse  ', typeof JSON.parse(<string>localStorage.getItem('robots')));
+    // console.log('json parse  val', JSON.parse(<string>localStorage.getItem('robots')));
+    localStorage.setItem('robots', JSON.stringify(localStorageRobots));
+    console.log('Robots ', localStorageRobots);
 }
 ;
 function onChangeCanTalkInput(e) {
@@ -181,40 +161,42 @@ function displayCanBlink(canBlink) {
 }
 ;
 function onClickPrevious() {
-    if (currentRobotIndexSelected - 1 >= 0) {
-        currentRobotIndexSelected--;
-        console.log('current index: ', currentRobotIndexSelected);
-        displayRobot(robots[currentRobotIndexSelected]);
+    if (Robot.getCurrentRobotIndexSelected() - 1 >= 0) {
+        Robot.setCurrentRobotIndexSelected(Robot.getCurrentRobotIndexSelected() - 1);
+        console.log('current index: ', Robot.getCurrentRobotIndexSelected());
+        displayRobot(Robot.getRobots()[Robot.getCurrentRobotIndexSelected()]);
         return;
     }
     ;
-    currentRobotIndexSelected = robots.length - 1;
-    console.log('current index: ', currentRobotIndexSelected);
-    displayRobot(robots[robots.length - 1]);
+    Robot.setCurrentRobotIndexSelected(Robot.getRobots().length - 1);
+    // currentRobotIndexSelected = robots.length - 1;
+    console.log('current index: ', Robot.getCurrentRobotIndexSelected());
+    displayRobot(Robot.getRobots()[Robot.getRobots().length - 1]);
     // showMessages();
 }
 ;
 function onClickNext() {
-    if (currentRobotIndexSelected + 1 <= robots.length - 1) {
-        currentRobotIndexSelected++;
-        console.log('current index: ', currentRobotIndexSelected);
-        displayRobot(robots[currentRobotIndexSelected]);
+    if (Robot.getCurrentRobotIndexSelected() + 1 <= Robot.getRobots().length - 1) {
+        Robot.setCurrentRobotIndexSelected(Robot.getCurrentRobotIndexSelected() + 1);
+        // currentRobotIndexSelected++;
+        console.log('current index: ', Robot.getCurrentRobotIndexSelected());
+        displayRobot(Robot.getRobots()[Robot.getCurrentRobotIndexSelected()]);
         return;
     }
     ;
-    currentRobotIndexSelected = 0;
-    console.log('current index: ', currentRobotIndexSelected);
-    displayRobot(robots[0]);
+    Robot.setCurrentRobotIndexSelected(0);
+    console.log('current index: ', Robot.getCurrentRobotIndexSelected());
+    displayRobot(Robot.getRobots()[0]);
     // showMessages();
 }
 ;
 function onShowCreatedRobots(e) {
     resetTable();
-    if (robots.length > 0) {
-        document.querySelector('#has-robot-counter').innerHTML = `${robots.length} robots found`;
+    if (Robot.getRobots().length > 0) {
+        document.querySelector('#has-robot-counter').innerHTML = `${Robot.getRobots().length} robots found`;
         document.querySelector('.table').style.visibility = 'visible';
         let table = document.querySelector('.table');
-        robots.forEach((robot) => {
+        Robot.getRobots().forEach((robot) => {
             let tr = document.createElement('tr');
             let nameTd = document.createElement('td');
             let nameATag = document.createElement('a');
@@ -267,9 +249,9 @@ function onShowCreatedRobots(e) {
 ;
 function onClickLinkRobot(e, id) {
     console.log(id);
-    console.log(robots);
+    console.log(Robot.getRobots());
     e.preventDefault();
-    displayRobot(robots[id]);
+    displayRobot(Robot.getRobots()[id]);
     // showMessages();
 }
 ;
@@ -286,10 +268,10 @@ function onClickSendMessage() {
         minute: '2-digit',
     });
     const currentRobotsIds = [];
-    robots.forEach((robot) => currentRobotsIds.push(robot.id));
+    Robot.getRobots().forEach((robot) => currentRobotsIds.push(robot.id));
     messages.push({
         currentRobotsIds,
-        creatorId: currentRobotIndexSelected,
+        creatorId: Robot.getCurrentRobotIndexSelected(),
         message,
         time: timeWithPmAm
     });
@@ -299,11 +281,13 @@ function onClickSendMessage() {
 ;
 function onClearLocalStorage(e) {
     e.preventDefault();
-    robots = [];
+    Robot.clearRobots();
     localStorage.removeItem('robots');
     document.querySelector("#slide-1").style.display = 'none';
     document.querySelector(".clearLocalStorageBtn").style.display = 'none';
     document.querySelector(".slider-buttons").style.display = 'none';
+    document.querySelector('.table').style.visibility = 'hidden';
+    document.querySelector('#has-robot-counter').innerHTML = 'No robots created yet';
 }
 ;
 function resetTable() {
@@ -321,16 +305,16 @@ function showMessages() {
     const messageReversed = [...messages];
     messageReversed.reverse();
     messageReversed.forEach((messageInfo) => {
-        if (messageInfo.currentRobotsIds.includes(currentRobotIndexSelected)) {
+        if (messageInfo.currentRobotsIds.includes(Robot.getCurrentRobotIndexSelected())) {
             document.querySelector(".messages > p").style.display = 'block';
             console.log(' robots ids: ' + messageInfo.currentRobotsIds);
-            console.log(' current index is : ' + currentRobotIndexSelected);
+            console.log(' current index is : ' + Robot.getCurrentRobotIndexSelected());
             const li = document.createElement("li");
             const firstParagraph = document.createElement("p");
             const secondParagraph = document.createElement("p");
             const robotName = document.createElement("span");
-            robotName.innerText = robots[messageInfo.creatorId].name;
-            robotName.style.color = robots[messageInfo.creatorId].color;
+            robotName.innerText = Robot.getRobots()[messageInfo.creatorId].name;
+            robotName.style.color = Robot.getRobots()[messageInfo.creatorId].color;
             firstParagraph.append(robotName);
             firstParagraph.append(' ' + messageInfo.time);
             secondParagraph.innerText = messageInfo.message;
@@ -341,49 +325,6 @@ function showMessages() {
         }
         ;
     });
-}
-;
-function showSliderButtons(id) {
-    if (robots.length > 1) {
-        currentRobotIndexSelected = id;
-        document.querySelector(".slider-buttons").style.display = 'block';
-    }
-    ;
-}
-function checkForRobotInputErrors(name, robotType, color, phrase, options) {
-    let hasError = false;
-    if (!name) {
-        document.querySelector(".name label[name='error']").style.visibility = 'visible';
-        hasError = true;
-    }
-    else {
-        document.querySelector(".name label[name='error']").style.visibility = 'hidden';
-    }
-    if (!robotType) {
-        document.querySelector(".select-type label[name='error']").style.visibility = 'visible';
-        hasError = true;
-    }
-    else {
-        document.querySelector(".select-type label[name='error']").style.visibility = 'hidden';
-    }
-    if (!color) {
-        document.querySelector(".select-color label[name='error']").style.visibility = 'visible';
-        hasError = true;
-    }
-    else {
-        document.querySelector(".select-color label[name='error']").style.visibility = 'hidden';
-    }
-    if (!phrase && options.canTalk) {
-        document.querySelector(".write-comment label[name='error']").style.visibility = 'visible';
-        hasError = true;
-    }
-    else {
-        document.querySelector(".write-comment label[name='error']").style.visibility = 'hidden';
-    }
-    if (!hasError) {
-        return false;
-    }
-    return true;
 }
 ;
 checkForRobots();
@@ -401,4 +342,5 @@ document.querySelector("#showCreatedRobotsBtn").addEventListener('click', onShow
 document.querySelector(".clearLocalStorageBtn").addEventListener('click', onClearLocalStorage);
 // onchange=onChangeCanTalkInput() 
 document.querySelector("#canTalk").addEventListener('check', onChangeCanTalkInput);
+export { addRobotToLocalStorage, displayRobot, showMessages };
 //# sourceMappingURL=index.js.map
