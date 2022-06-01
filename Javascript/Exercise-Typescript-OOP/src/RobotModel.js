@@ -1,15 +1,12 @@
-// interface IRobot{
-//     robots: [];
-// };
 class Robot {
     static getRobots() {
-        return Robot._robots;
+        return this._robots;
     }
     static addRobot(robot) {
-        Robot._robots.push(robot);
+        this._robots.push(robot);
     }
     static replaceCurrentRobots(robots) {
-        Robot._robots = robots;
+        this._robots = robots;
     }
     static clearRobots() {
         this._robots = [];

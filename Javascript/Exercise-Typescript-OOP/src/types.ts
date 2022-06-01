@@ -22,7 +22,7 @@ interface Options {
     canBlink: boolean,
 };
 
-interface Message {
+interface IMessage {
     currentRobotsIds: number[],
     creatorId: number,
     message: string,
@@ -37,4 +37,4 @@ let options: Options = {
 
 type OptionsObjectKey = keyof typeof options;
 
-export { IRobot, Options, OptionsObjectKey, Message, RobotType };
+export { IRobot, Options, OptionsObjectKey, IMessage, RobotType };

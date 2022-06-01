@@ -1,24 +1,19 @@
 import { IRobot } from './types.js';
-// interface IRobot{
-//     robots: [];
-
-
-// };
 
 class Robot {
     private static _robots: IRobot[] = [];
     private static _currentRobotIndexSelected: number = 0;
 
     public static getRobots(): IRobot[] {
-        return Robot._robots;
+        return this._robots;
     }
 
     public static addRobot(robot: IRobot): void {
-        Robot._robots.push(robot);
+        this._robots.push(robot);
     }
 
     public static replaceCurrentRobots(robots: IRobot[]): void {
-        Robot._robots = robots;
+        this._robots = robots;
     }
 
     public static clearRobots(): void {

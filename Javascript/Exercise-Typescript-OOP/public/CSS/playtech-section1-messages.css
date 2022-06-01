@@ -28,6 +28,16 @@
     align-self: end;
 }
 
+#reverseMessagesOrderBtn {
+    margin: 5px 0;
+    padding: 5px 15px;
+    display: block;
+    max-width: fit-content;
+    border: 1px solid black;
+    border-radius: 5px;
+    align-self: end;
+}
+
 .create-message button::placeholder {
     color: black;
 }

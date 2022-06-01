@@ -1,13 +1,13 @@
-import { IRobot, OptionsObjectKey, Options, Message, RobotType } from './types.js';
+import { IRobot, OptionsObjectKey, Options, IMessage, RobotType } from './types.js';
 import checkForRobotInputErrors from './errorHandling.js';
 import Robot from './RobotModel.js';
+import ChatManager from './MessageModel.js';
 
-const messages: Message[] = [];
 let showTalkAnimation: any;
 
 
 function checkForRobots(): void {
-    if (localStorage.length >= 1) {
+    if (localStorage.getItem('robots')) {
         Robot.replaceCurrentRobots(JSON.parse(<string>localStorage.getItem('robots')));
         displayRobot(Robot.getRobots()[0]);
         showSliderButtons(0);
@@ -30,6 +30,7 @@ function onSubmit(e: any): void {
     let color: string = (<HTMLInputElement>document.querySelector(".select-color input")).value;
     const robotType: RobotType = robotTypeValue === 'Male' ? RobotType.MALE : RobotType.FEMALE;
     let checkboxElement: HTMLInputElement[] = Array.from(document.querySelectorAll(".checkbox-wrapper input"));
+    console.log(name);
 
     checkboxElement.forEach((input: HTMLInputElement, i: number) => {
         const inputId = input.id as OptionsObjectKey;
@@ -87,7 +88,7 @@ function addRobotToLocalStorage(robot: IRobot): void {
         localStorage.setItem('robots', JSON.stringify([robot]));
         return;
     };
-    let localStorageRobots = JSON.parse(<string>localStorage.getItem('robots'));
+    let localStorageRobots: IRobot[] = JSON.parse(<string>localStorage.getItem('robots'));
     localStorageRobots.push(robot);
     localStorage.setItem('robots', JSON.stringify(localStorageRobots));
     console.log('Robots ', localStorageRobots);
@@ -270,12 +271,18 @@ function onClickSendMessage(): void {
     });
     const currentRobotsIds: number[] = [];
     Robot.getRobots().forEach((robot: IRobot) => currentRobotsIds.push(robot.id));
-    messages.push({
+    if (localStorage.getItem('messages')) {
+        const localStorageMessages: IMessage[] = JSON.parse(<string>localStorage.getItem('messages'));
+        ChatManager.replaceCurrentMessages(localStorageMessages);
+    }
+    ChatManager.addMessage({
         currentRobotsIds,
         creatorId: Robot.getCurrentRobotIndexSelected(),
         message,
         time: timeWithPmAm
     });
+    localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
+
     (<HTMLInputElement>document.getElementById("message-input")).value = '';
     showMessages();
 };
@@ -283,12 +290,31 @@ function onClickSendMessage(): void {
 function onClearLocalStorage(e: Event): void {
     e.preventDefault();
     Robot.clearRobots();
+    ChatManager.clearMessages();
     localStorage.removeItem('robots');
+    localStorage.removeItem('messages');
     (<HTMLElement>document.querySelector("#slide-1")).style.display = 'none';
     (<HTMLElement>document.querySelector(".clearLocalStorageBtn")).style.display = 'none';
     (<HTMLDivElement>document.querySelector(".slider-buttons")).style.display = 'none';
     (<HTMLElement>document.querySelector('.table')).style.visibility = 'hidden';
     (<HTMLElement>document.querySelector('#has-robot-counter')).innerHTML = 'No robots created yet';
+};
+
+function onReverseMessagesOrder(): void {
+    if (!localStorage.getItem('showNewMessagesOrder')) {
+        localStorage.setItem('showNewMessagesOrder', 'true');
+    }
+    if (localStorage.getItem('showNewMessagesOrder') === 'true') {
+        (<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).innerText = 'Show oldest messages';
+        localStorage.setItem('showNewMessagesOrder', 'false');
+    } else {
+        (<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).innerText = 'Show newest messages';
+        localStorage.setItem('showNewMessagesOrder', 'true');
+    }
+    ChatManager.reverseMessageOrder();
+
+    localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
+    showMessages();
 };
 
 function resetTable(): void {
@@ -298,41 +324,53 @@ function resetTable(): void {
     };
 };
 
+function getLocalStorageMessageOrder(): void {
+
+};
+
 function showMessages(): void {
     (<HTMLUListElement>document.querySelector(".messages > p")).style.display = 'none';
     let messagesSelector: HTMLUListElement = (<HTMLUListElement>document.querySelector(".messages ul"));
     messagesSelector.innerHTML = '';
-    const messageReversed: Message[] = [...messages];
-    messageReversed.reverse();
-    messageReversed.forEach((messageInfo: Message) => {
-        if (messageInfo.currentRobotsIds.includes(Robot.getCurrentRobotIndexSelected())) {
-            (<HTMLUListElement>document.querySelector(".messages > p")).style.display = 'block';
+    if (localStorage.getItem('messages')) {
 
-            console.log(' robots ids: ' + messageInfo.currentRobotsIds)
-            console.log(' current index is : ' + Robot.getCurrentRobotIndexSelected())
-            const li: HTMLLIElement = document.createElement("li");
-            const firstParagraph: HTMLParagraphElement = document.createElement("p");
-            const secondParagraph: HTMLParagraphElement = document.createElement("p");
-            const robotName: HTMLSpanElement = document.createElement("span");
-            robotName.innerText = Robot.getRobots()[messageInfo.creatorId].name;
-            robotName.style.color = Robot.getRobots()[messageInfo.creatorId].color;
+        const localStorageMessages: IMessage[] = JSON.parse(<string>localStorage.getItem('messages'));
+        ChatManager.replaceCurrentMessages(localStorageMessages);
+        const messageReversed: IMessage[] = [...ChatManager.getMessages()];
+        console.log('messageReversed ', messageReversed);
+        if (!localStorage.getItem('showNewMessagesOrder')) {
+            messageReversed.reverse();
+        }
+        messageReversed.forEach((messageInfo: IMessage) => {
+            if (messageInfo.currentRobotsIds.includes(Robot.getCurrentRobotIndexSelected())) {
+                (<HTMLUListElement>document.querySelector(".messages > p")).style.display = 'block';
 
-            firstParagraph.append(robotName);
-            firstParagraph.append(' ' + messageInfo.time);
-            secondParagraph.innerText = messageInfo.message;
-            li.appendChild(firstParagraph);
-            li.appendChild(secondParagraph);
-            messagesSelector = (<HTMLUListElement>document.querySelector(".messages ul"));
-            messagesSelector.appendChild(li);
-        };
-    });
+                console.log(' robots ids: ' + messageInfo.currentRobotsIds)
+                console.log(' current index is : ' + Robot.getCurrentRobotIndexSelected())
+                const li: HTMLLIElement = document.createElement("li");
+                const firstParagraph: HTMLParagraphElement = document.createElement("p");
+                const secondParagraph: HTMLParagraphElement = document.createElement("p");
+                const robotName: HTMLSpanElement = document.createElement("span");
+                robotName.innerText = Robot.getRobots()[messageInfo.creatorId].name;
+                robotName.style.color = Robot.getRobots()[messageInfo.creatorId].color;
+
+                firstParagraph.append(robotName);
+                firstParagraph.append(' ' + messageInfo.time);
+                secondParagraph.innerText = messageInfo.message;
+                li.appendChild(firstParagraph);
+                li.appendChild(secondParagraph);
+                messagesSelector = (<HTMLUListElement>document.querySelector(".messages ul"));
+                messagesSelector.appendChild(li);
+            };
+        })
+    };
 };
 
 
 
 
 checkForRobots();
-
+showMessages();
 
 //onclick=onClickSendMessage()
 (<HTMLButtonElement>document.querySelector("#sendMessageBtn")).addEventListener('click', onClickSendMessage);
@@ -348,6 +386,8 @@ checkForRobots();
 (<HTMLButtonElement>document.querySelector(".clearLocalStorageBtn")).addEventListener('click', onClearLocalStorage);
 // onchange=onChangeCanTalkInput() 
 (<HTMLButtonElement>document.querySelector("#canTalk")).addEventListener('check', onChangeCanTalkInput);
+//onclick=reverseMessagesOrderBtn()
+(<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).addEventListener('click', onReverseMessagesOrder);
 
 export { addRobotToLocalStorage, displayRobot, showMessages };
 
