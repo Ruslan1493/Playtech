@@ -7,6 +7,12 @@ class ChatManager {
         this._messages.push(message);
     }
     ;
+    static getIdAndIncreaseIt() {
+        const id = this._id;
+        this._id = this._id + 1;
+        return id;
+    }
+    ;
     static replaceCurrentMessages(messages) {
         this._messages = messages;
     }
@@ -19,12 +25,18 @@ class ChatManager {
         return this._showNewMessagesFirst;
     }
     ;
-    static reverseMessageOrder() {
+    static orderMessagesByNewest(state) {
+        if (state) {
+            this._messages = [...this._messages].sort((a, b) => { return b.id - a.id; });
+            return;
+        }
         this._showNewMessagesFirst = !this._showNewMessagesFirst;
-        this._messages = [...this._messages].reverse();
+        this._messages = [...this._messages].sort((a, b) => { return a.id - b.id; });
+        return;
     }
     ;
 }
+ChatManager._id = 0;
 ChatManager._messages = [];
 ChatManager._showNewMessagesFirst = true;
 ;

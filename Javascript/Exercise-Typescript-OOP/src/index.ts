@@ -15,6 +15,7 @@ function checkForRobots(): void {
         return;
     };
     (<HTMLElement>document.querySelector(".clearLocalStorageBtn")).style.display = 'none';
+
 };
 
 function onSubmit(e: any): void {
@@ -279,7 +280,8 @@ function onClickSendMessage(): void {
         currentRobotsIds,
         creatorId: Robot.getCurrentRobotIndexSelected(),
         message,
-        time: timeWithPmAm
+        time: timeWithPmAm,
+        id: ChatManager.getIdAndIncreaseIt()
     });
     localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
 
@@ -305,13 +307,15 @@ function onReverseMessagesOrder(): void {
         localStorage.setItem('showNewMessagesOrder', 'true');
     }
     if (localStorage.getItem('showNewMessagesOrder') === 'true') {
-        (<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).innerText = 'Show oldest messages';
-        localStorage.setItem('showNewMessagesOrder', 'false');
-    } else {
         (<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).innerText = 'Show newest messages';
+        localStorage.setItem('showNewMessagesOrder', 'false');
+        ChatManager.orderMessagesByNewest(false);
+    } else {
+        (<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).innerText = 'Show oldest messages';
         localStorage.setItem('showNewMessagesOrder', 'true');
+        ChatManager.orderMessagesByNewest(true);
     }
-    ChatManager.reverseMessageOrder();
+    
 
     localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
     showMessages();
@@ -324,10 +328,6 @@ function resetTable(): void {
     };
 };
 
-function getLocalStorageMessageOrder(): void {
-
-};
-
 function showMessages(): void {
     (<HTMLUListElement>document.querySelector(".messages > p")).style.display = 'none';
     let messagesSelector: HTMLUListElement = (<HTMLUListElement>document.querySelector(".messages ul"));
@@ -338,9 +338,11 @@ function showMessages(): void {
         ChatManager.replaceCurrentMessages(localStorageMessages);
         const messageReversed: IMessage[] = [...ChatManager.getMessages()];
         console.log('messageReversed ', messageReversed);
-        if (!localStorage.getItem('showNewMessagesOrder')) {
-            messageReversed.reverse();
-        }
+        // if (!localStorage.getItem('showNewMessagesOrder')) {
+        //     console.log('in check for showNewMessagesOrder');
+            
+        //     messageReversed.reverse();
+        // }
         messageReversed.forEach((messageInfo: IMessage) => {
             if (messageInfo.currentRobotsIds.includes(Robot.getCurrentRobotIndexSelected())) {
                 (<HTMLUListElement>document.querySelector(".messages > p")).style.display = 'block';

@@ -26,7 +26,8 @@ interface IMessage {
     currentRobotsIds: number[],
     creatorId: number,
     message: string,
-    time: string
+    time: string,
+    id: number
 };
 
 let options: Options = {

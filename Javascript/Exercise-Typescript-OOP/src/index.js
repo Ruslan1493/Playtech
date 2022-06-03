@@ -264,7 +264,8 @@ function onClickSendMessage() {
         currentRobotsIds,
         creatorId: Robot.getCurrentRobotIndexSelected(),
         message,
-        time: timeWithPmAm
+        time: timeWithPmAm,
+        id: ChatManager.getIdAndIncreaseIt()
     });
     localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
     document.getElementById("message-input").value = '';
@@ -285,8 +286,19 @@ function onClearLocalStorage(e) {
 }
 ;
 function onReverseMessagesOrder() {
-    getLocalStorageMessageOrder();
-    ChatManager.reverseMessageOrder();
+    if (!localStorage.getItem('showNewMessagesOrder')) {
+        localStorage.setItem('showNewMessagesOrder', 'true');
+    }
+    if (localStorage.getItem('showNewMessagesOrder') === 'true') {
+        document.querySelector("#reverseMessagesOrderBtn").innerText = 'Show newest messages';
+        localStorage.setItem('showNewMessagesOrder', 'false');
+        ChatManager.orderMessagesByNewest(false);
+    }
+    else {
+        document.querySelector("#reverseMessagesOrderBtn").innerText = 'Show oldest messages';
+        localStorage.setItem('showNewMessagesOrder', 'true');
+        ChatManager.orderMessagesByNewest(true);
+    }
     localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
     showMessages();
 }
@@ -299,31 +311,19 @@ function resetTable() {
     ;
 }
 ;
-function getLocalStorageMessageOrder() {
-    if (!localStorage.getItem('showNewMessagesOrder')) {
-        localStorage.setItem('showNewMessagesOrder', 'true');
-    }
-    if (localStorage.getItem('showNewMessagesOrder') == 'true') {
-        document.querySelector("#reverseMessagesOrderBtn").innerText = 'Show oldest messages';
-        localStorage.setItem('showNewMessagesOrder', 'false');
-    }
-    else {
-        document.querySelector("#reverseMessagesOrderBtn").innerText = 'Show newest messages';
-        localStorage.setItem('showNewMessagesOrder', 'true');
-    }
-}
-;
 function showMessages() {
     document.querySelector(".messages > p").style.display = 'none';
     let messagesSelector = document.querySelector(".messages ul");
     messagesSelector.innerHTML = '';
     if (localStorage.getItem('messages')) {
-        getLocalStorageMessageOrder();
         const localStorageMessages = JSON.parse(localStorage.getItem('messages'));
         ChatManager.replaceCurrentMessages(localStorageMessages);
         const messageReversed = [...ChatManager.getMessages()];
         console.log('messageReversed ', messageReversed);
-        // messageReversed.reverse();
+        // if (!localStorage.getItem('showNewMessagesOrder')) {
+        //     console.log('in check for showNewMessagesOrder');
+        //     messageReversed.reverse();
+        // }
         messageReversed.forEach((messageInfo) => {
             if (messageInfo.currentRobotsIds.includes(Robot.getCurrentRobotIndexSelected())) {
                 document.querySelector(".messages > p").style.display = 'block';
