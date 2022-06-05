@@ -250,10 +250,11 @@ function onClickSendMessage() {
     }
     document.querySelector(".create-message label[name='error']").style.visibility = 'hidden';
     const currentTime = new Date();
-    const timeWithPmAm = currentTime.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
+    console.log('currentTime ', currentTime);
+    // const timeWithPmAm: string = currentTime.toLocaleTimeString('en-US', {
+    //     hour: '2-digit',
+    //     minute: '2-digit',
+    // });
     const currentRobotsIds = [];
     Robot.getRobots().forEach((robot) => currentRobotsIds.push(robot.id));
     if (localStorage.getItem('messages')) {
@@ -264,7 +265,7 @@ function onClickSendMessage() {
         currentRobotsIds,
         creatorId: Robot.getCurrentRobotIndexSelected(),
         message,
-        time: timeWithPmAm,
+        time: currentTime,
         id: ChatManager.getIdAndIncreaseIt()
     });
     localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
@@ -326,6 +327,17 @@ function showMessages() {
         // }
         messageReversed.forEach((messageInfo) => {
             if (messageInfo.currentRobotsIds.includes(Robot.getCurrentRobotIndexSelected())) {
+                let dateNow = new Date();
+                let currentMsgDate = new Date(messageInfo.time);
+                let diff = Math.floor((dateNow - currentMsgDate) / 1000);
+                console.log("Time diff, ", diff);
+                let minutes = Math.floor(diff / 60);
+                let hours = Math.floor(minutes / 60);
+                console.log("minutes diff, ", minutes);
+                // const timeWithPmAm: string = messageInfo.time.toLocaleTimeString('en-US', {
+                //     hour: '2-digit',
+                //     minute: '2-digit',
+                // });
                 document.querySelector(".messages > p").style.display = 'block';
                 console.log(' robots ids: ' + messageInfo.currentRobotsIds);
                 console.log(' current index is : ' + Robot.getCurrentRobotIndexSelected());
@@ -336,7 +348,7 @@ function showMessages() {
                 robotName.innerText = Robot.getRobots()[messageInfo.creatorId].name;
                 robotName.style.color = Robot.getRobots()[messageInfo.creatorId].color;
                 firstParagraph.append(robotName);
-                firstParagraph.append(' ' + messageInfo.time);
+                firstParagraph.append(' ' + ChatManager.getTimeInHoursPM(messageInfo));
                 secondParagraph.innerText = messageInfo.message;
                 li.appendChild(firstParagraph);
                 li.appendChild(secondParagraph);

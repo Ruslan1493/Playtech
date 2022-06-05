@@ -41,6 +41,16 @@ class ChatManager {
         return;
     };
 
+    public static getTimeInHoursPM(messageInfo: IMessage): string {
+        console.log('Message info: ', messageInfo);
+        let newDate = new Date(messageInfo.time);
+        const timeWithPmAm: string = newDate.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+        return timeWithPmAm;
+    };
+
 };
 
 export default ChatManager;

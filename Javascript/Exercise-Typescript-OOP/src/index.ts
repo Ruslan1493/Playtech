@@ -266,10 +266,12 @@ function onClickSendMessage(): void {
     }
     (<HTMLElement>document.querySelector(".create-message label[name='error']")).style.visibility = 'hidden';
     const currentTime: Date = new Date();
-    const timeWithPmAm: string = currentTime.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
+    console.log('currentTime ', currentTime);
+    
+    // const timeWithPmAm: string = currentTime.toLocaleTimeString('en-US', {
+    //     hour: '2-digit',
+    //     minute: '2-digit',
+    // });
     const currentRobotsIds: number[] = [];
     Robot.getRobots().forEach((robot: IRobot) => currentRobotsIds.push(robot.id));
     if (localStorage.getItem('messages')) {
@@ -280,7 +282,7 @@ function onClickSendMessage(): void {
         currentRobotsIds,
         creatorId: Robot.getCurrentRobotIndexSelected(),
         message,
-        time: timeWithPmAm,
+        time: currentTime,
         id: ChatManager.getIdAndIncreaseIt()
     });
     localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
@@ -315,7 +317,7 @@ function onReverseMessagesOrder(): void {
         localStorage.setItem('showNewMessagesOrder', 'true');
         ChatManager.orderMessagesByNewest(true);
     }
-    
+
 
     localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
     showMessages();
@@ -338,13 +340,18 @@ function showMessages(): void {
         ChatManager.replaceCurrentMessages(localStorageMessages);
         const messageReversed: IMessage[] = [...ChatManager.getMessages()];
         console.log('messageReversed ', messageReversed);
-        // if (!localStorage.getItem('showNewMessagesOrder')) {
-        //     console.log('in check for showNewMessagesOrder');
-            
-        //     messageReversed.reverse();
-        // }
+  
         messageReversed.forEach((messageInfo: IMessage) => {
             if (messageInfo.currentRobotsIds.includes(Robot.getCurrentRobotIndexSelected())) {
+                let dateNow: any = new Date();
+                let currentMsgDate: any = new Date(messageInfo.time);
+                let diff: number = Math.floor((dateNow - currentMsgDate) / 1000);
+                let minutes = Math.floor(diff / 60);
+                let hoursDifference = Math.floor(minutes / 60);
+                if(hoursDifference > 5){
+                    return;
+                }
+
                 (<HTMLUListElement>document.querySelector(".messages > p")).style.display = 'block';
 
                 console.log(' robots ids: ' + messageInfo.currentRobotsIds)
@@ -357,7 +364,7 @@ function showMessages(): void {
                 robotName.style.color = Robot.getRobots()[messageInfo.creatorId].color;
 
                 firstParagraph.append(robotName);
-                firstParagraph.append(' ' + messageInfo.time);
+                firstParagraph.append(' ' + ChatManager.getTimeInHoursPM(messageInfo));
                 secondParagraph.innerText = messageInfo.message;
                 li.appendChild(firstParagraph);
                 li.appendChild(secondParagraph);

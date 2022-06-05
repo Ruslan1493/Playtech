@@ -35,6 +35,16 @@ class ChatManager {
         return;
     }
     ;
+    static getTimeInHoursPM(messageInfo) {
+        console.log('Message info: ', messageInfo);
+        let newDate = new Date(messageInfo.time);
+        const timeWithPmAm = newDate.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+        return timeWithPmAm;
+    }
+    ;
 }
 ChatManager._id = 0;
 ChatManager._messages = [];

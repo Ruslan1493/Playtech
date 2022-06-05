@@ -26,7 +26,7 @@ interface IMessage {
     currentRobotsIds: number[],
     creatorId: number,
     message: string,
-    time: string,
+    time: Date,
     id: number
 };
 
