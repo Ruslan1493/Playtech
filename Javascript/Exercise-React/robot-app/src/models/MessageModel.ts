@@ -1,47 +1,51 @@
 import { IMessage } from './types.js';
 
 class ChatManager {
-    private static _id: number = 0;
-    private static _messages: IMessage[] = [];
-    private static _showNewMessagesFirst: boolean = true;
+    private _id: number = 0;
+    private _messages: IMessage[] = [];
 
-    public static getMessages(): IMessage[] {
+    constructor(){
+        this.replaceCurrentMessages();
+    }
+
+    public getMessages(): IMessage[] {
         return this._messages;
-    };
+    }
 
-    public static addMessage(message: IMessage): void {
+    public addMessage(message: IMessage): void {
         this._messages.push(message);
-    };
+    }
 
-    public static getIdAndIncreaseIt(): number {
-        const id = this._id;
+    public getIdAndIncreaseIt(): number {
         this._id = this._id + 1;
-        return id;
-    };
+        return this._id;
+    }
 
-    public static replaceCurrentMessages(messages: IMessage[]): void {
-        this._messages = messages;
-    };
+    public replaceCurrentMessages(): void {
+        const localStorageMessages: IMessage[] = JSON.parse(<string>localStorage.getItem('messages'));
+        if(localStorageMessages && localStorageMessages.length > 0){
+            this._messages = localStorageMessages;
+        }
+    }
 
-    public static clearMessages(): void {
+    public clearMessages(): void {
+        localStorage.removeItem('messages');
         this._messages = [];
-    };
+    }
 
-    public static showNewMessagesFirst(): boolean {
-        return this._showNewMessagesFirst;
-    };
-
-    public static orderMessagesByNewest(state: boolean): void {
+    public orderMessagesByNewest(state: boolean): void {
         if (state) {
             this._messages = [...this._messages].sort((a, b) => { return b.id - a.id });
+            console.log('new message order: ', this._messages);
+            
             return;
         }
-        this._showNewMessagesFirst = !this._showNewMessagesFirst;
         this._messages = [...this._messages].sort((a, b) => { return a.id - b.id });
+        console.log('new message order: ', this._messages);
         return;
-    };
+    }
 
-    public static getTimeInHoursPM(messageInfo: IMessage): string {
+    public getTimeInHoursPM(messageInfo: IMessage): string {
         console.log('Message info: ', messageInfo);
         let newDate = new Date(messageInfo.time);
         const timeWithPmAm: string = newDate.toLocaleTimeString('en-US', {
@@ -49,8 +53,7 @@ class ChatManager {
             minute: '2-digit',
         });
         return timeWithPmAm;
-    };
-
+    }
 };
 
 export default ChatManager;

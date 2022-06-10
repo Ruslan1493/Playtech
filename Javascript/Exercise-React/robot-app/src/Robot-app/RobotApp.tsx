@@ -1,12 +1,22 @@
-import React from 'react';
-import '../Robot-app/playtech-section1.css';
-import '../Robot-app/media-queries.css';
-import '../Robot-app/playtech-section1-messages.css';
-import '../Robot-app/playtech-section2.css';
+import React, { FunctionComponent } from 'react';
+import '../CSS/Robot-app/playtech-section1.css';
+import '../CSS/Robot-app/media-queries.css';
+import '../CSS/Robot-app/playtech-section1-messages.css';
+import '../CSS/Robot-app/playtech-section2.css';
 
-function App() {
-  const robots = [];
-  return (
+interface RobotProps {
+  robots: []
+}
+
+interface RobotState {
+
+}
+
+class RobotApp extends React.Component<RobotProps, RobotState>  {
+
+  public render() {
+
+    return (
 
       <main>
         <section id="slide-1" className="factory-section">
@@ -125,7 +135,8 @@ function App() {
           </div>
         </section>
       </main>
-  );
+    );
+  }
 }
 
-export default App;
+export default RobotApp;

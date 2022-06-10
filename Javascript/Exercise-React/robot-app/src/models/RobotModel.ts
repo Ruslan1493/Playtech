@@ -1,38 +1,56 @@
 import { IRobot } from './types.js';
 
-class Robot {
-    private static _robots: IRobot[] = [];
-    private static _currentRobotIndexSelected: number = 0;
+class RobotManager {
+    private _robots: IRobot[] = [];
+    private _currentRobotIndexSelected: number = 0;
 
-    public static getRobots(): IRobot[] {
+    constructor() {
+        this.getRobotsFromLocalStorage();
+    }
+
+    public getRobots(): IRobot[] {
         return this._robots;
     }
 
-    public static addRobot(robot: IRobot): void {
+    public addRobot(robot: IRobot): void {
         this._robots.push(robot);
     }
 
-    public static replaceCurrentRobots(robots: IRobot[]): void {
+    public replaceCurrentRobots(robots: IRobot[]): void {
         this._robots = robots;
     }
 
-    public static clearRobots(): void {
+    public clearRobots(): void {
+        localStorage.removeItem('robots');
         this._robots = [];
     }
 
-    public static getRobotsFromLocalStorage(array: IRobot[]): void {
-        this._robots = array;
+    public getRobotsFromLocalStorage(): void {
+        const robotsFromLocalStorage: IRobot[] = JSON.parse(<string>localStorage.getItem('robots'));
+        if (robotsFromLocalStorage && robotsFromLocalStorage.length > 0) {
+            this._robots = robotsFromLocalStorage;
+        }
     }
 
-    public static getCurrentRobotIndexSelected(): number {
+    public getCurrentRobotIndexSelected(): number {
         return this._currentRobotIndexSelected;
     }
 
-    public static setCurrentRobotIndexSelected(newIndex: number): void {
+    public setCurrentRobotIndexSelected(newIndex: number): void {
         this._currentRobotIndexSelected = newIndex;
+    }
+
+    public addRobotToLocalStorage(robot: IRobot): void {
+        if (!localStorage.getItem('robots')) {
+            localStorage.setItem('robots', JSON.stringify([robot]));
+            return;
+        };
+        let localStorageRobots: IRobot[] = JSON.parse(<string>localStorage.getItem('robots'));
+        localStorageRobots.push(robot);
+        localStorage.setItem('robots', JSON.stringify(localStorageRobots));
     }
 };
 
 
 
-export default Robot;
+export default RobotManager;

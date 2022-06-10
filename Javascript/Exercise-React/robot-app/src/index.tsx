@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './Robot-app/App';
+import App from './Robot-app/RobotApp';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
