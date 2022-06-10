@@ -1,17 +1,16 @@
-import { IRobot, OptionsObjectKey, Options, IMessage, RobotType } from './types.js';
+import { IRobot, OptionsObjectKey, Options, IMessage } from './types.js';
+import RobotType  from './types.js';
 import checkForRobotInputErrors from './errorHandling.js';
-import RobotManager from './RobotManager.js';
-import ChatManager from './MessageManager';
+import Robot from './RobotModel.js';
+import ChatManager from './MessageModel.js';
 
 let showTalkAnimation: any;
 
-const robots: RobotManager = new RobotManager();
-const messages: ChatManager = new ChatManager();
-
 
 function checkForRobots(): void {
-    if (robots.getRobots().length > 0) {
-        displayRobot(robots.getRobots()[0]);
+    if (localStorage.getItem('robots')) {
+        Robot.replaceCurrentRobots(JSON.parse(<string>localStorage.getItem('robots')));
+        displayRobot(Robot.getRobots()[0]);
         showSliderButtons(0);
         (<HTMLElement>document.querySelector(".clearLocalStorageBtn")).style.display = 'inline-block';
         return;
@@ -46,9 +45,9 @@ function onSubmit(e: any): void {
         return;
     };
 
-    if (robots.getRobots().length > 0) {
-        console.log('last robot id = ', robots.getRobots()[robots.getRobots().length - 1].id)
-        id = robots.getRobots()[robots.getRobots().length - 1].id;
+    if (Robot.getRobots().length > 0) {
+        console.log('last robot id = ', Robot.getRobots()[Robot.getRobots().length - 1].id)
+        id = Robot.getRobots()[Robot.getRobots().length - 1].id;
         id++;
     } else {
         id = 0;
@@ -57,17 +56,18 @@ function onSubmit(e: any): void {
     // id = robots.length > 0 ? robots[robots.length - 1].id += 1 : 0;
 
     // console.log('index of robot ', currentRobotIndexSelected)
-    robots.addRobot({
+    Robot.addRobot({
         name, robotType, color, phrase, options, id
     });
 
-    robots.addRobotToLocalStorage({
+    addRobotToLocalStorage({
         name, robotType, color, phrase, options, id
     });
 
     showSliderButtons(id);
 
-    displayRobot(robots.getRobots()[robots.getRobots().length - 1]);
+    displayRobot(Robot.getRobots()[Robot.getRobots().length - 1]);
+
 
 
     name = (<HTMLInputElement>document.querySelector(".name input")).value = '';
@@ -79,11 +79,24 @@ function onSubmit(e: any): void {
 
 
 function showSliderButtons(id: number): void {
-    if (robots.getRobots().length > 1) {
-        robots.setCurrentRobotIndexSelected(id);
+    if (Robot.getRobots().length > 1) {
+        Robot.setCurrentRobotIndexSelected(id);
         (<HTMLDivElement>document.querySelector(".slider-buttons")).style.display = 'block';
     };
 }
+
+function addRobotToLocalStorage(robot: IRobot): void {
+    if (!localStorage.getItem('robots')) {
+        localStorage.setItem('robots', JSON.stringify([robot]));
+        return;
+    };
+    let localStorageRobots: IRobot[] = JSON.parse(<string>localStorage.getItem('robots'));
+    localStorageRobots.push(robot);
+    localStorage.setItem('robots', JSON.stringify(localStorageRobots));
+    console.log('Robots ', localStorageRobots);
+};
+
+
 
 function onChangeCanTalkInput(e: any): boolean {
     let canTalksInput: boolean = (<HTMLInputElement>document.querySelector(".checkbox-wrapper input[id='canTalk']")).checked;
@@ -101,12 +114,10 @@ function displayRobot(robot: IRobot): void {
     (<HTMLElement>document.querySelector("#slide-1")).style.display = 'block';
     (<HTMLElement>document.querySelector(".robot-name")).innerHTML = robot.name;
     if (robot.robotType == 'Male') {
-        (<HTMLElement>document.querySelector(".factory-header")).innerHTML = 'Male robots';
-
+        (<HTMLElement>document.querySelector(".factory-header")).innerHTML = 'Male Robot';
         (<HTMLElement>document.querySelector(".rock")).style.display = 'none';
     } else {
-        (<HTMLElement>document.querySelector(".factory-header")).innerHTML = 'Female robots';
-
+        (<HTMLElement>document.querySelector(".factory-header")).innerHTML = 'Female Robot';
         (<HTMLElement>document.querySelector(".rock")).style.display = 'block';
         (<HTMLElement>document.querySelector(".rock")).style.borderBottom = `41px solid ${robot.color}`;
     }
@@ -158,39 +169,36 @@ function displayCanBlink(canBlink: boolean) {
 };
 
 function onClickPrevious(): void {
-    if (robots.getCurrentRobotIndexSelected() - 1 >= 0) {
-        robots.setCurrentRobotIndexSelected(robots.getCurrentRobotIndexSelected() - 1);
-        console.log('current index: ', robots.getCurrentRobotIndexSelected());
-        displayRobot(robots.getRobots()[robots.getCurrentRobotIndexSelected()]);
+    if (Robot.getCurrentRobotIndexSelected() - 1 >= 0) {
+        Robot.setCurrentRobotIndexSelected(Robot.getCurrentRobotIndexSelected() - 1);
+        console.log('current index: ', Robot.getCurrentRobotIndexSelected());
+        displayRobot(Robot.getRobots()[Robot.getCurrentRobotIndexSelected()]);
         return;
     };
-    robots.setCurrentRobotIndexSelected(robots.getRobots().length - 1);
-    console.log('current index: ', robots.getCurrentRobotIndexSelected());
-    displayRobot(robots.getRobots()[robots.getRobots().length - 1]);
+    Robot.setCurrentRobotIndexSelected(Robot.getRobots().length - 1);
+    console.log('current index: ', Robot.getCurrentRobotIndexSelected());
+    displayRobot(Robot.getRobots()[Robot.getRobots().length - 1]);
 };
 
 function onClickNext(): void {
-    if (robots.getCurrentRobotIndexSelected() + 1 <= robots.getRobots().length - 1) {
-        robots.setCurrentRobotIndexSelected(robots.getCurrentRobotIndexSelected() + 1);
-        console.log('current index: ', robots.getCurrentRobotIndexSelected());
-        displayRobot(robots.getRobots()[robots.getCurrentRobotIndexSelected()]);
+    if (Robot.getCurrentRobotIndexSelected() + 1 <= Robot.getRobots().length - 1) {
+        Robot.setCurrentRobotIndexSelected(Robot.getCurrentRobotIndexSelected() + 1);
+        console.log('current index: ', Robot.getCurrentRobotIndexSelected());
+        displayRobot(Robot.getRobots()[Robot.getCurrentRobotIndexSelected()]);
         return;
     };
-    robots.setCurrentRobotIndexSelected(0);
-    console.log('current index: ', robots.getCurrentRobotIndexSelected());
-    displayRobot(robots.getRobots()[0]);
+    Robot.setCurrentRobotIndexSelected(0);
+    console.log('current index: ', Robot.getCurrentRobotIndexSelected());
+    displayRobot(Robot.getRobots()[0]);
 };
 
 function onShowCreatedRobots(e: Event): void {
     resetTable();
-    if (robots.getRobots().length > 0) {
-
-        (<HTMLElement>document.querySelector('#has-robot-counter')).innerHTML = `${robots.getRobots().length} robots found`;
-
+    if (Robot.getRobots().length > 0) {
+        (<HTMLElement>document.querySelector('#has-robot-counter')).innerHTML = `${Robot.getRobots().length} robots found`;
         (<HTMLElement>document.querySelector('.table')).style.visibility = 'visible';
         let table: HTMLTableElement = <HTMLTableElement>document.querySelector('.table');
-        robots.getRobots().forEach((robot: IRobot) => {
-
+        Robot.getRobots().forEach((robot: IRobot) => {
             let tr: HTMLElement = document.createElement('tr');
             let nameTd: HTMLElement = document.createElement('td');
             let nameATag: HTMLAnchorElement = document.createElement('a');
@@ -246,11 +254,9 @@ function onShowCreatedRobots(e: Event): void {
 
 function onClickLinkRobot(e: Event, id: number): void {
     console.log(id);
-    console.log(robots.getRobots());
-
+    console.log(Robot.getRobots());
     e.preventDefault();
-    displayRobot(robots.getRobots()[id]);
-
+    displayRobot(Robot.getRobots()[id]);
 };
 
 function onClickSendMessage(): void {
@@ -262,26 +268,25 @@ function onClickSendMessage(): void {
     (<HTMLElement>document.querySelector(".create-message label[name='error']")).style.visibility = 'hidden';
     const currentTime: Date = new Date();
     console.log('currentTime ', currentTime);
-
+    
     // const timeWithPmAm: string = currentTime.toLocaleTimeString('en-US', {
     //     hour: '2-digit',
     //     minute: '2-digit',
     // });
     const currentRobotsIds: number[] = [];
-    robots.getRobots().forEach((robot: IRobot) => currentRobotsIds.push(robot.id));
-
+    Robot.getRobots().forEach((robot: IRobot) => currentRobotsIds.push(robot.id));
     if (localStorage.getItem('messages')) {
-        messages.replaceCurrentMessages();
+        const localStorageMessages: IMessage[] = JSON.parse(<string>localStorage.getItem('messages'));
+        ChatManager.replaceCurrentMessages(localStorageMessages);
     }
-    messages.addMessage({
+    ChatManager.addMessage({
         currentRobotsIds,
-        creatorId: robots.getCurrentRobotIndexSelected(),
-
+        creatorId: Robot.getCurrentRobotIndexSelected(),
         message,
         time: currentTime,
-        id: messages.getIdAndIncreaseIt()
+        id: ChatManager.getIdAndIncreaseIt()
     });
-    localStorage.setItem('messages', JSON.stringify(messages.getMessages()));
+    localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
 
     (<HTMLInputElement>document.getElementById("message-input")).value = '';
     showMessages();
@@ -289,9 +294,8 @@ function onClickSendMessage(): void {
 
 function onClearLocalStorage(e: Event): void {
     e.preventDefault();
-    robots.clearRobots();
-
-    messages.clearMessages();
+    Robot.clearRobots();
+    ChatManager.clearMessages();
     localStorage.removeItem('robots');
     localStorage.removeItem('messages');
     (<HTMLElement>document.querySelector("#slide-1")).style.display = 'none';
@@ -308,15 +312,15 @@ function onReverseMessagesOrder(): void {
     if (localStorage.getItem('showNewMessagesOrder') === 'true') {
         (<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).innerText = 'Show newest messages';
         localStorage.setItem('showNewMessagesOrder', 'false');
-        messages.orderMessagesByNewest(false);
+        ChatManager.orderMessagesByNewest(false);
     } else {
         (<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).innerText = 'Show oldest messages';
         localStorage.setItem('showNewMessagesOrder', 'true');
-        messages.orderMessagesByNewest(true);
+        ChatManager.orderMessagesByNewest(true);
     }
 
 
-    localStorage.setItem('messages', JSON.stringify(messages.getMessages()));
+    localStorage.setItem('messages', JSON.stringify(ChatManager.getMessages()));
     showMessages();
 };
 
@@ -333,38 +337,35 @@ function showMessages(): void {
     messagesSelector.innerHTML = '';
     if (localStorage.getItem('messages')) {
 
-        messages.replaceCurrentMessages();
-        const messageReversed: IMessage[] = [...messages.getMessages()];
+        const localStorageMessages: IMessage[] = JSON.parse(<string>localStorage.getItem('messages'));
+        ChatManager.replaceCurrentMessages(localStorageMessages);
+        const messageReversed: IMessage[] = [...ChatManager.getMessages()];
         console.log('messageReversed ', messageReversed);
-
+  
         messageReversed.forEach((messageInfo: IMessage) => {
-            if (messageInfo.currentRobotsIds.includes(robots.getCurrentRobotIndexSelected())) {
-
+            if (messageInfo.currentRobotsIds.includes(Robot.getCurrentRobotIndexSelected())) {
                 let dateNow: any = new Date();
                 let currentMsgDate: any = new Date(messageInfo.time);
                 let diff: number = Math.floor((dateNow - currentMsgDate) / 1000);
                 let minutes = Math.floor(diff / 60);
                 let hoursDifference = Math.floor(minutes / 60);
-                if (hoursDifference > 5) {
+                if(hoursDifference > 5){
                     return;
                 }
 
                 (<HTMLUListElement>document.querySelector(".messages > p")).style.display = 'block';
 
                 console.log(' robots ids: ' + messageInfo.currentRobotsIds)
-                console.log(' current index is : ' + robots.getCurrentRobotIndexSelected())
-
+                console.log(' current index is : ' + Robot.getCurrentRobotIndexSelected())
                 const li: HTMLLIElement = document.createElement("li");
                 const firstParagraph: HTMLParagraphElement = document.createElement("p");
                 const secondParagraph: HTMLParagraphElement = document.createElement("p");
                 const robotName: HTMLSpanElement = document.createElement("span");
-                robotName.innerText = robots.getRobots()[messageInfo.creatorId].name;
-
-                robotName.style.color = robots.getRobots()[messageInfo.creatorId].color;
-
+                robotName.innerText = Robot.getRobots()[messageInfo.creatorId].name;
+                robotName.style.color = Robot.getRobots()[messageInfo.creatorId].color;
 
                 firstParagraph.append(robotName);
-                firstParagraph.append(' ' + messages.getTimeInHoursPM(messageInfo));
+                firstParagraph.append(' ' + ChatManager.getTimeInHoursPM(messageInfo));
                 secondParagraph.innerText = messageInfo.message;
                 li.appendChild(firstParagraph);
                 li.appendChild(secondParagraph);
@@ -379,6 +380,7 @@ function showMessages(): void {
 
 
 checkForRobots();
+showMessages();
 
 //onclick=onClickSendMessage()
 (<HTMLButtonElement>document.querySelector("#sendMessageBtn")).addEventListener('click', onClickSendMessage);
@@ -397,7 +399,7 @@ checkForRobots();
 //onclick=reverseMessagesOrderBtn()
 (<HTMLButtonElement>document.querySelector("#reverseMessagesOrderBtn")).addEventListener('click', onReverseMessagesOrder);
 
-export { displayRobot, showMessages };
+export { addRobotToLocalStorage, displayRobot, showMessages };
 
 
 
