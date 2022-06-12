@@ -38,13 +38,28 @@ interface IMessage {
     id: number
 };
 
+interface RobotMessageProps {
+    robots: IRobot[],
+    messages: IMessage[]
+};
+
 interface RobotAppState {
     robots: IRobot[],
     messages: IMessage[]
-}
+};
 
 interface FormProps {
     robots: IRobot[],
-}
+};
 
-export type { IRobot, Options, OptionsObjectKey, IMessage, RobotType, RobotAppState, FormProps };
+interface RobotWrapperProps {
+    robot: IRobot
+};
+
+interface RobotProps {
+    robotsProps: IRobot[],
+    messagesProps: IMessage[]
+};
+
+export type { IRobot, Options, OptionsObjectKey, IMessage, RobotAppState, FormProps, RobotWrapperProps, RobotMessageProps, RobotProps };
+export default RobotType;

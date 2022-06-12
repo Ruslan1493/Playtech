@@ -1,7 +1,7 @@
 import React from 'react';
 import RobotSection from '../Robot-section/RobotSection';
 import FormSection from '../Form-section/FormSections';
-import { IMessage, IRobot, RobotAppState } from '../../interfaces/types';
+import { RobotAppState } from '../../interfaces/types';
 
 class RobotApp extends React.Component<any, RobotAppState>  {
 
@@ -18,7 +18,7 @@ class RobotApp extends React.Component<any, RobotAppState>  {
     return (
 
       <main>
-        <RobotSection robots={this.state.robots} messages={this.state.messages} />
+        <RobotSection robotsProps={this.state.robots} messagesProps={this.state.messages} />
         <FormSection robots={[]} />
       </main >
     );

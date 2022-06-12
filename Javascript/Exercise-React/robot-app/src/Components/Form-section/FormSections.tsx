@@ -1,9 +1,7 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 import '../../CSS/media-queries.css';
 import '../../CSS/playtech-section2.css';
 import { FormProps } from '../../interfaces/types';
-
-
 
 const FormSection: FunctionComponent<FormProps> = ({ robots }) => {
 

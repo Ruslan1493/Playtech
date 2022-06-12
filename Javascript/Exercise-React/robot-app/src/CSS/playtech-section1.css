@@ -28,10 +28,10 @@ main {
 }
 
 #slide-1 {
-    display: none;
+    /* display: none; */
     background-color: #FFFFE7;
     width: 100%;
-    /* display: block; */
+    display: block;
     min-height: 300px;
     border: 1px solid black;
 }
