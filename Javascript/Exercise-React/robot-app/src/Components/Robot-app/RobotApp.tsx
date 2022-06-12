@@ -1,12 +1,7 @@
 import React from 'react';
-import RobotSection from '../robot-section/RobotSection';
-import FormSection from '../form-section/FormSections';
-import { IMessage, IRobot } from '../interfaces/types';
-
-interface RobotAppState {
-  robots: IRobot[],
-  messages: IMessage[]
-}
+import RobotSection from '../Robot-section/RobotSection';
+import FormSection from '../Form-section/FormSections';
+import { IMessage, IRobot, RobotAppState } from '../../interfaces/types';
 
 class RobotApp extends React.Component<any, RobotAppState>  {
 

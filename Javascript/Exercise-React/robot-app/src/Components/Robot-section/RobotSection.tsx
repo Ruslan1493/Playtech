@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
-import '../CSS/media-queries.css';
-import '../CSS/playtech-section1.css';
-import '../CSS/playtech-section1-messages.css';
-import { IMessage, IRobot } from "../interfaces/types";
+import '../../CSS/media-queries.css';
+import '../../CSS/playtech-section1.css';
+import '../../CSS/playtech-section1-messages.css';
+import { IMessage, IRobot } from "../../interfaces/types";
 
 interface RobotProps {
     robots: IRobot[],
@@ -10,7 +10,7 @@ interface RobotProps {
 }
 
 const RobotSection: FunctionComponent<RobotProps> = ({ robots, messages }) => {
-    
+
     return (
         <>
             <section id="slide-1" className="factory-section">

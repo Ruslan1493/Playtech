@@ -1,6 +1,14 @@
+type OptionsObjectKey = keyof typeof options;
+
 enum RobotType {
     MALE = "Male",
     FEMALE = "Female"
+};
+
+let options: Options = {
+    canJump: false,
+    canTalk: false,
+    canBlink: false,
 };
 
 interface IRobot {
@@ -30,13 +38,13 @@ interface IMessage {
     id: number
 };
 
-let options: Options = {
-    canJump: false,
-    canTalk: false,
-    canBlink: false,
-};
+interface RobotAppState {
+    robots: IRobot[],
+    messages: IMessage[]
+}
 
-type OptionsObjectKey = keyof typeof options;
+interface FormProps {
+    robots: IRobot[],
+}
 
-export type { IRobot, Options, OptionsObjectKey, IMessage };
-export default RobotType;
+export type { IRobot, Options, OptionsObjectKey, IMessage, RobotType, RobotAppState, FormProps };
