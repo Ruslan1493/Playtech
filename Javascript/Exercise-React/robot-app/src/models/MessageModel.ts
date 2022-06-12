@@ -1,4 +1,4 @@
-import { IMessage } from './types.js';
+import { IMessage } from '../interfaces/types.js';
 
 class ChatManager {
     private _id: number = 0;

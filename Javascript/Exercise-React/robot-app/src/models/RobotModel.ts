@@ -1,4 +1,4 @@
-import { IRobot } from './types.js';
+import { IRobot } from '../interfaces/types.js';
 
 class RobotManager {
     private _robots: IRobot[] = [];

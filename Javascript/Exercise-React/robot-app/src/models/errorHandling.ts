@@ -1,4 +1,4 @@
-import { Options } from './types.js';
+import { Options } from '../interfaces/types.js';
 
 export default function checkForRobotInputErrors(name: string, robotType: string, color: string, phrase: string, options: Options): boolean {
     let hasError: boolean = false;

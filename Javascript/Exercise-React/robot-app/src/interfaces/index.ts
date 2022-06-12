@@ -1,8 +1,8 @@
 import { IRobot, OptionsObjectKey, Options, IMessage } from './types.js';
 import RobotType  from './types.js';
-import checkForRobotInputErrors from './errorHandling.js';
-import Robot from './RobotModel.js';
-import ChatManager from './MessageModel.js';
+import checkForRobotInputErrors from '../models/errorHandling.js';
+import Robot from '../models/RobotModel.js';
+import ChatManager from '../models/MessageModel.js';
 
 // let showTalkAnimation: any;
 
