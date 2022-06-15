@@ -1,3 +1,5 @@
+import RobotManager from "../models/RobotModel";
+
 type OptionsObjectKey = keyof typeof options;
 
 enum RobotType {
@@ -39,7 +41,7 @@ interface IMessage {
 };
 
 interface RobotMessageProps {
-    robots: IRobot[],
+    robotsProps: RobotManager | null,
     messages: IMessage[]
 };
 
@@ -49,15 +51,16 @@ interface RobotAppState {
 };
 
 interface FormProps {
-    robots: IRobot[],
+    robotsProps: RobotManager | null,
+    addRobots: (robot: IRobot) => void
 };
 
 interface RobotWrapperProps {
-    robot: IRobot
+    robot: IRobot | null
 };
 
 interface RobotProps {
-    robotsProps: IRobot[],
+    robotsProps: RobotManager | null,
     messagesProps: IMessage[]
 };
 

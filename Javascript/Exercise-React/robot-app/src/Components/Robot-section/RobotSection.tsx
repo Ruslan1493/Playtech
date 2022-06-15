@@ -7,21 +7,11 @@ import RobotType from '../../interfaces/types';
 import RobotWrapper from '../Robot-wrapper/RobotWrapper';
 import MessageSection from '../Message-section/MessageSection';
 import SliderButtons from '../Slider-buttons/SliderButtons';
+import RobotManager from '../../models/RobotModel';
 
 const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProps }) => {
-    const [robots, setRobots] = useState<IRobot[]>([]);
-    const [selectedRobot, setSelectedRobot] = useState<IRobot>({
-        name: '',
-        robotType: RobotType.MALE,
-        color: '',
-        phrase: '',
-        id: 0,
-        options: {
-            'canJump': false,
-            'canTalk': false,
-            'canBlink': false,
-        }
-    });
+    const [robots, setRobots] = useState<RobotManager | null>(null);
+    const [selectedRobot, setSelectedRobot] = useState<IRobot | null>(null);
 
     return (
         <>
@@ -29,7 +19,7 @@ const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProp
                 <p className="factory-header">Basic Robot</p>
                 <div className="content-wrapper">
                     <RobotWrapper robot={selectedRobot} />
-                    <MessageSection robots={robots} messages={messagesProps} />
+                    <MessageSection robotsProps={robots} messages={messagesProps} />
                     <SliderButtons />
                 </div>
             </section>

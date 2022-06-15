@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { RobotMessageProps } from '../../interfaces/types';
 
-const MessageSection: FunctionComponent<RobotMessageProps> = ({ robots, messages }) => {
+const MessageSection: FunctionComponent<RobotMessageProps> = ({ robotsProps, messages }) => {
 
     return (
         <div className="boxesWrapper">
