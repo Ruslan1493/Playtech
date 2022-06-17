@@ -1,25 +1,35 @@
-import React, { useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import RobotSection from '../Robot-section/RobotSection';
 import FormSection from '../Form-section/FormSections';
 import { IRobot } from '../../interfaces/types';
 import RobotManager from '../../models/RobotModel';
 
-const App = () => {
-  const [robots, setRobots] = useState<RobotManager>(new RobotManager());
+const App: FunctionComponent<any> = () => {
+  const [robotsManager, setManagerRobots] = useState<RobotManager>(new RobotManager());
+  const [robots, setRobots] = useState<IRobot[]>([]);
   const [messages, setMessages] = useState([]);
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    console.log('use effect', robotsManager.getRobots().length);
+  }, [robots.length])
 
   function addRobots(newRobot: IRobot): void {
-    robots.addRobot(newRobot);
-    const newRobots: RobotManager = robots
-    setRobots(newRobots);
+    robotsManager.addRobot(newRobot);
+    // setCounter(counter + 1);
+    setRobots([...robotsManager.getRobots()]);
+    console.log('App robots: ', robotsManager.getRobots());
+    console.log('App robots: ', robotsManager.getRobots().length);
   }
 
   return (
     <main>
-      {
-        robots.getRobots().length > 0 ? <RobotSection robotsProps={robots} messagesProps={messages} /> : null
-      }
-      <FormSection robotsProps={robots} addRobots={addRobots} />
+      <>
+        {
+          robots.length > 0 ? <RobotSection robotsProps={robots} messagesProps={messages} /> : null
+        }
+        <FormSection robotsProps={robots} addRobots={addRobots} />
+      </>
     </main >
   );
 }

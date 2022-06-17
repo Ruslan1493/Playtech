@@ -13,7 +13,8 @@ class RobotManager {
     }
 
     public addRobot(robot: IRobot): void {
-        this._robots.push(robot);
+        this._robots.push({ ...robot, id: this.getCurrentRobotIndexSelected() });
+        this.setCurrentRobotIndexSelected(this.getCurrentRobotIndexSelected() + 1)
     }
 
     public replaceCurrentRobots(robots: IRobot[]): void {

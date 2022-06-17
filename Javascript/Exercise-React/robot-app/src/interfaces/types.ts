@@ -41,8 +41,8 @@ interface IMessage {
 };
 
 interface RobotMessageProps {
-    robotsProps: RobotManager | null,
-    messages: IMessage[]
+    robotsProps: IRobot[],
+    messages: IMessage[] | null
 };
 
 interface RobotAppState {
@@ -51,7 +51,7 @@ interface RobotAppState {
 };
 
 interface FormProps {
-    robotsProps: RobotManager | null,
+    robotsProps: IRobot[],
     addRobots: (robot: IRobot) => void
 };
 
@@ -60,9 +60,15 @@ interface RobotWrapperProps {
 };
 
 interface RobotProps {
-    robotsProps: RobotManager | null,
-    messagesProps: IMessage[]
+    robotsProps: IRobot[],
+    messagesProps: IMessage[] | null
 };
 
-export type { IRobot, Options, OptionsObjectKey, IMessage, RobotAppState, FormProps, RobotWrapperProps, RobotMessageProps, RobotProps };
-export default RobotType;
+interface IErrors {
+    'name': string,
+    'select-color': string,
+    'write-comment': string,
+};
+
+export type { IRobot, Options, OptionsObjectKey, IMessage, IErrors, RobotAppState, FormProps, RobotWrapperProps, RobotMessageProps, RobotProps };
+export { RobotType };

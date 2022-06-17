@@ -1,37 +1,27 @@
-import { Options } from '../interfaces/types.js';
+import { Options, IErrors } from '../interfaces/types.js';
 
-export default function checkForRobotInputErrors(name: string, robotType: string, color: string, phrase: string, options: Options): boolean {
+export default function checkForRobotInputErrors(name: string, color: string, phrase: string, options: Options): { hasError: boolean, errors: IErrors } {
     let hasError: boolean = false;
-    if (!name) {
-        (<HTMLLabelElement>document.querySelector(".name label[name='error']")).style.visibility = 'visible';
-        hasError = true;
-    } else {
-        (<HTMLLabelElement>document.querySelector(".name label[name='error']")).style.visibility = 'hidden';
+    const errors: IErrors = {
+        'name': 'hidden',
+        'select-color': 'hidden',
+        'write-comment': 'hidden',
     }
 
-    if (!robotType) {
-        (<HTMLLabelElement>document.querySelector(".select-type label[name='error']")).style.visibility = 'visible';
+    if (!name) {
+        errors['name'] = 'visible';
         hasError = true;
-    } else {
-        (<HTMLLabelElement>document.querySelector(".select-type label[name='error']")).style.visibility = 'hidden';
     }
 
     if (!color) {
-        (<HTMLLabelElement>document.querySelector(".select-color label[name='error']")).style.visibility = 'visible';
+        errors['select-color'] = 'visible';
         hasError = true;
-    } else {
-        (<HTMLLabelElement>document.querySelector(".select-color label[name='error']")).style.visibility = 'hidden';
     }
 
     if (!phrase && options.canTalk) {
-        (<HTMLLabelElement>document.querySelector(".write-comment label[name='error']")).style.visibility = 'visible';
+        errors['write-comment'] = 'visible';
         hasError = true;
-    } else {
-        (<HTMLLabelElement>document.querySelector(".write-comment label[name='error']")).style.visibility = 'hidden';
     }
 
-    if (!hasError) {
-        return false;
-    }
-    return true;
+    return { hasError, errors };
 };
