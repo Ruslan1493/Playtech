@@ -3,39 +3,39 @@ import { FunctionComponent } from 'react';
 import { RobotWrapperProps } from '../../interfaces/types';
 
 const RobotWrapper: FunctionComponent<RobotWrapperProps> = ({ robot }) => {
-    const [talkAn, setTalk] = useState<boolean>(false);
-    const [canTalk, setcanTalk] = useState<string>('none');
-    // let canTalk: string = robot?.options.canTalk ? 'changeMouth ease-in-out 2s infinite' : 'none';
-    // const timer = () => setTimeout(() => {
-    //     canTalk = robot?.options.canTalk ? 'changeMouth ease-in-out 2s infinite' : 'none';
-    // }, 3000)
+    const [canTalk, setCanTalk] = useState<string>('none');
+    const [canJump, setCanJump] = useState<string>('');
+    const [canBlink, setCanBlink] = useState<string>('');
+    const [phrase, setPhrase] = useState<string>('');
+
+    useEffect(() => {
+        console.log('cantalk ', robot?.options.canTalk);
+
+        setCanTalk(robot?.options.canTalk ? 'changeMouth ease-in-out 2s infinite' : 'none')
+        if (robot?.phrase !== '' || robot.phrase !== undefined) {
+            setPhrase(robot?.phrase ? robot?.phrase : '')
+        }
+        setCanJump(robot?.options.canJump ? 'robotJump ease-out 2s infinite' : 'none');
+        setCanBlink(robot?.options.canBlink ? 'robotBlink ease-in-out 2s infinite' : 'none');
+    }, [robot]);
+
     let timer = () => setTimeout(() => {
-        setcanTalk('none');
-        setTalk(true);
-    }, 3000)
+        setCanTalk('none');
+        setPhrase('');
+    }, 10000)
 
     useEffect(() => {
-        setcanTalk(robot?.options.canTalk ? 'changeMouth ease-in-out 2s infinite' : 'none');
-    })
-
-    useEffect(() => {
-
-        const timerId = timer();
-        console.log(canTalk);
-        // setcanTalk('none')
-        return () => {
-            clearTimeout(timerId);
-            console.log(canTalk);
+        const timerID = timer();
+        return function cleanup() {
+            clearTimeout(timerID);
         };
-    }, [talkAn]);
-
-    const canJump: string = robot?.options.canJump ? 'robotJump ease-out 2s infinite' : 'none';
-    const canBlink: string = robot?.options.canBlink ? 'robotBlink ease-in-out 2s infinite' : 'none';
+    });
 
     return (
         <div className="robotWrapper">
             <div id="robot">
-                <p className="robot-bubble bubble" style={{}}></p>
+                {/* {<p>{counter}</p>} */}
+                <p className="robot-bubble bubble" style={{ display: phrase === '' ? 'none' : 'block' }}>{phrase === '' ? '' : phrase}</p>
                 <div id="robot-head">
                     <div className="robot-eyes" style={{ animation: canBlink }}></div>
                     <div className="robot-eyes"></div>
