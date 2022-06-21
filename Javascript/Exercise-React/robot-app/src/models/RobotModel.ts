@@ -1,55 +1,92 @@
-import { IRobot } from '../interfaces/types.js';
+import { IRobot, Options, RobotType } from '../interfaces/types';
 
 class RobotManager {
-    private _robots: IRobot[] = [];
-    private _currentRobotIndexSelected: number = 0;
+    // private _robots: IRobot[] = [];
+    private _name: string = '';
+    private _robotType: RobotType = RobotType.MALE;
+    private _color: string = '#e96126';
+    private _phrase: string = '';
+    private _id: number = 0;
+    private _options: Options = {
+        canJump: false,
+        canTalk: false,
+        canBlink: false,
+    };
 
-    constructor() {
-        this.getRobotsFromLocalStorage();
+    constructor(name: string, robotType: RobotType, color: string, phrase: string, id: number, options: Options) {
+        this._name = name;
+        this._robotType = robotType;
+        this._color = color;
+        this._phrase = phrase;
+        this._id = id;
+        this._options = options;
+        // this.getRobotsFromLocalStorage();
     }
 
-    public getRobots(): IRobot[] {
-        return this._robots;
+    public get name(): string {
+        return this._name;
     }
 
-    public addRobot(robot: IRobot): void {
-        this._robots.push({ ...robot, id: this.getCurrentRobotIndexSelected() });
-        this.setCurrentRobotIndexSelected(this.getCurrentRobotIndexSelected() + 1)
+    public get robotType(): RobotType {
+        return this._robotType;
     }
 
-    public replaceCurrentRobots(robots: IRobot[]): void {
-        this._robots = robots;
+    public get color(): string {
+        return this._color;
     }
 
-    public clearRobots(): void {
-        localStorage.removeItem('robots');
-        this._robots = [];
+    public get phrase(): string {
+        return this._phrase;
     }
 
-    public getRobotsFromLocalStorage(): void {
-        const robotsFromLocalStorage: IRobot[] = JSON.parse(<string>localStorage.getItem('robots'));
-        if (robotsFromLocalStorage && robotsFromLocalStorage.length > 0) {
-            this._robots = robotsFromLocalStorage;
+    public get id(): number {
+        return this._id;
+    }
+
+    public get options(): Options {
+        return this._options;
+    }
+
+    public getRobotInfo(): IRobot {
+        return {
+            name: this.name,
+            robotType: this.robotType,
+            color: this.color,
+            phrase: this.phrase,
+            id: this.id,
+            options: this.options,
         }
     }
 
-    public getCurrentRobotIndexSelected(): number {
-        return this._currentRobotIndexSelected;
-    }
+    // public clearRobots(): void {
+    //     localStorage.removeItem('robots');
+    //     this._robots = [];
+    // }
 
-    public setCurrentRobotIndexSelected(newIndex: number): void {
-        this._currentRobotIndexSelected = newIndex;
-    }
+    // public getRobotsFromLocalStorage(): void {
+    //     const robotsFromLocalStorage: IRobot[] = JSON.parse(<string>localStorage.getItem('robots'));
+    //     if (robotsFromLocalStorage && robotsFromLocalStorage.length > 0) {
+    //         this._robots = robotsFromLocalStorage;
+    //     }
+    // }
 
-    public addRobotToLocalStorage(robot: IRobot): void {
-        if (!localStorage.getItem('robots')) {
-            localStorage.setItem('robots', JSON.stringify([robot]));
-            return;
-        };
-        let localStorageRobots: IRobot[] = JSON.parse(<string>localStorage.getItem('robots'));
-        localStorageRobots.push(robot);
-        localStorage.setItem('robots', JSON.stringify(localStorageRobots));
-    }
+    // public getCurrentRobotIndexSelected(): number {
+    //     return this._currentRobotIndexSelected;
+    // }
+
+    // public setCurrentRobotIndexSelected(newIndex: number): void {
+    //     this._currentRobotIndexSelected = newIndex;
+    // }
+
+    // public addRobotToLocalStorage(robot: IRobot): void {
+    //     if (!localStorage.getItem('robots')) {
+    //         localStorage.setItem('robots', JSON.stringify([robot]));
+    //         return;
+    //     };
+    //     let localStorageRobots: IRobot[] = JSON.parse(<string>localStorage.getItem('robots'));
+    //     localStorageRobots.push(robot);
+    //     localStorage.setItem('robots', JSON.stringify(localStorageRobots));
+    // }
 };
 
 

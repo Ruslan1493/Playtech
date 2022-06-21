@@ -41,10 +41,15 @@ const RobotWrapper: FunctionComponent<RobotWrapperProps> = ({ robot }) => {
                     <div className="robot-eyes"></div>
                     <div id="robot-mouth" style={{ animation: canTalk }}></div>
                 </div>
-                <div id="robot-body">
+                <div id="robot-body" style={{ borderTopColor: robot?.color }}>
                     <div className="hands"></div>
                     <div className="hands"></div>
-                    <div className="rock" style={{ display: robot?.robotType === 'Male' ? 'none' : 'block' }}></div>
+                    <div className="rock" style={
+                        {
+                            display: robot?.robotType === 'Male' ? 'none' : 'block',
+                            borderBottomColor: robot?.color
+                        }
+                    }></div>
                 </div>
                 <div id="robot-legs">
                     <div className="legs" style={{ animation: canJump }}></div>

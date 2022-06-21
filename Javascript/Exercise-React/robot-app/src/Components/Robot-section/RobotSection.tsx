@@ -10,8 +10,8 @@ import SliderButtons from '../Slider-buttons/SliderButtons';
 import RobotManager from '../../models/RobotModel';
 
 const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProps }) => {
-    const [robots, setRobots] = useState<IRobot[]>([]);
-    const [selectedRobot, setSelectedRobot] = useState<IRobot | null>(null);
+    const [robots, setRobots] = useState<RobotManager[]>([]);
+    const [selectedRobot, setSelectedRobot] = useState<RobotManager | null>(null);
 
     useEffect(() => {
         setRobots(robotsProps);

@@ -56,11 +56,11 @@ interface FormProps {
 };
 
 interface RobotWrapperProps {
-    robot: IRobot | null
+    robot: RobotManager | null
 };
 
 interface RobotProps {
-    robotsProps: IRobot[],
+    robotsProps: RobotManager[],
     messagesProps: IMessage[] | null
 };
 
