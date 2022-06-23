@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import '../../CSS/media-queries.css';
 import '../../CSS/playtech-section2.css';
 import { RobotType, FormProps, IRobot, IErrors } from '../../interfaces/types';
@@ -26,12 +26,27 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
   });
 
   useEffect(() => {
+    console.log('USEEFFECT FORM robotsProps', robotsProps);
+
+    setRobots(robotsProps);
+    console.log(robotsProps);
+
+  }, [robotsProps.length])
+
+
+  useEffect(() => {
+    console.log('FORM USEEFFECT robotDataEntered', robotDataEntered);
+
     setErrorLabels({
       'name': 'hidden',
       'select-color': 'hidden',
       'write-comment': 'hidden',
     })
   }, [robotDataEntered])
+
+  // const add: void = useMemo((robotDataEntered) => {
+  //   return addRobots(robotDataEntered);
+  // }, [robotDataEntered])
 
   function onSubmitHandler(e: React.FormEvent<HTMLButtonElement>): void {
     console.log(robotDataEntered);
@@ -67,18 +82,15 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
   }
 
   let handleChange = (e: React.FormEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
-    // e.preventDefault()
     e.stopPropagation();
     let inputValue: string | boolean = e.currentTarget.value;
     const name: string = e.currentTarget.name;
-    console.log(inputValue);
     let type: any;
     if (name === 'robotType') {
       type = inputValue === 'Male' ? RobotType.MALE : RobotType.FEMALE;
       setRobotDataEntered({ ...robotDataEntered, robotType: type });
     } else if (name === 'canJump' || name === 'canTalk' || name === 'canBlink') {
       const isChecked: boolean = (e.target as HTMLInputElement).checked;
-      console.log(isChecked);
       setRobotDataEntered({ ...robotDataEntered, options: { ...robotDataEntered.options, [name]: isChecked } });
     } else {
       setRobotDataEntered({ ...robotDataEntered, [name]: inputValue });
@@ -137,17 +149,37 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
       </div>
       <div id="table-section">
         <h2 id="has-robot-counter">No robots created yet</h2>
-        {/* <table className="table">
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Color</th>
-            <th>Options</th>
-          </tr>
-        </table> */}
+        {robots.length > 0 ?
+          <table className="table" style={{ visibility: 'visible' }}>
+            <tbody>
+              <>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Color</th>
+                  <th>Options</th>
+                </tr>
+                {robots.length > 0 && robots.map(robot => {
+                  console.log('ROBOTS', robot);
+
+                  return (
+                    <tr>
+                      <td>{robot.name}</td>
+                      <td>{robot.robotType}</td>
+                      <td>{robot.color}</td>
+                      <td>{robot.getOptions()}</td>
+                    </tr>
+                  )
+                })}
+              </>
+            </tbody>
+          </table>
+          :
+          null
+        }
       </div>
     </section>
   )
 };
 
-export default FormSection;
+export default React.memo(FormSection);

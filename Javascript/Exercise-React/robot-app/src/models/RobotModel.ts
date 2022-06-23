@@ -58,6 +58,17 @@ class RobotManager {
         }
     }
 
+    public getOptions(): string {
+        const optionsArr: string[] = [];
+        for (const [key, value] of Object.entries(this.options)) {
+            if(value === true){
+                optionsArr.push(key)
+            }
+        }
+        const result = optionsArr.join(', ');
+        return result;
+    }
+
     // public clearRobots(): void {
     //     localStorage.removeItem('robots');
     //     this._robots = [];

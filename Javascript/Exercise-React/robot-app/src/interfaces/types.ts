@@ -51,7 +51,7 @@ interface RobotAppState {
 };
 
 interface FormProps {
-    robotsProps: IRobot[],
+    robotsProps: RobotManager[],
     addRobots: (robot: IRobot) => void
 };
 

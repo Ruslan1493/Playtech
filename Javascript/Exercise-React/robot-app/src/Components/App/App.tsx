@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import RobotSection from '../Robot-section/RobotSection';
 import FormSection from '../Form-section/FormSections';
 import { IRobot } from '../../interfaces/types';
@@ -6,47 +6,63 @@ import RobotManager from '../../models/RobotModel';
 
 const App: FunctionComponent<any> = () => {
   const [robotsManager, setManagerRobots] = useState<RobotManager[]>([]);
-  const [robots, setRobots] = useState<IRobot[]>([]);
   const [messages, setMessages] = useState([]);
+  const robots: RobotManager[] = [];
 
   useEffect(() => {
-    console.log('use effect', robotsManager.length);
+    console.log('use effect', robotsManager);
     getRobotsFromLocalStorage();
-    // robotsManager.getRobotsFromLocalStorage();
-    // setRobots([...robotsManager]);
   }, [robotsManager.length])
 
+  const getRobots = useMemo(() => {
+    return robotsManager;
+  }, [robotsManager.length])
 
   function getRobotsFromLocalStorage(): void {
-    const robotsFromLocalStorage: RobotManager[] = JSON.parse(localStorage.getItem('robots') || '');
-    if (robotsFromLocalStorage && robotsFromLocalStorage.length > 0) {
-      setManagerRobots(robotsFromLocalStorage);
+    if (localStorage.getItem('robots')) {
+      let robotsFromLocalStorage: RobotManager[] = JSON.parse(localStorage.getItem('robots') || '');
+      const robotsArr: RobotManager[] = [];
+      if (robotsFromLocalStorage && robotsFromLocalStorage.length > 0) {
+        robotsFromLocalStorage.forEach(robot => {
+          console.log("ROBOTS FROM LOCAL STORAGE INFO", robot);
+
+          const newRobot = new RobotManager(robot.name, robot.robotType, robot.color, robot.phrase, robot.id, robot.options);
+          robotsArr.push(newRobot)
+        })
+        setManagerRobots(robotsArr);
+      }
     }
   }
 
-  function addRobots(robot: IRobot): void {
-    console.log(robot);
-    // robotsManager.addRobot(newRobot);
-    // robotsManager.addRobotToLocalStorage(robotsManager[robotsManager.length - 1]);
+  const addRobots = useCallback((robot: IRobot): void => {
     let id: number = 0;
     if (robotsManager.length > 0) {
       id = robotsManager[robotsManager.length - 1].id + 1;
-      // console.log('robotsManager.length > 0 = id: ', id);
     }
-    const newRobot = new RobotManager(robot.name, robot.robotType, robot.color, robot.phrase, id, robot.options);
-    addRobotToLocalStorage(newRobot.getRobotInfo());
-    console.log('new RObot ', newRobot.name)
-    setManagerRobots([...robotsManager, newRobot]);
-  }
+    const robotManager = new RobotManager(robot.name, robot.robotType, robot.color, robot.phrase, id, robot.options);
+
+    const newRobot: IRobot = {
+      name: robotManager.name,
+      robotType: robotManager.robotType,
+      color: robotManager.color,
+      phrase: robotManager.phrase,
+      id,
+      options: robotManager.options
+    }
+    addRobotToLocalStorage(newRobot);
+    setManagerRobots([...robotsManager, robotManager]);
+  }, [robotsManager.length])
 
   function addRobotToLocalStorage(robot: IRobot): void {
     if (!localStorage.getItem('robots')) {
       localStorage.setItem('robots', JSON.stringify([robot]));
       return;
     };
-    let localStorageRobots: IRobot[] = JSON.parse(localStorage.getItem('robots') || '');
-    localStorageRobots.push(robot);
-    localStorage.setItem('robots', JSON.stringify(localStorageRobots));
+    if (localStorage.getItem('robots')) {
+      let localStorageRobots: IRobot[] = JSON.parse(localStorage.getItem('robots') || '');
+      localStorageRobots.push(robot);
+      localStorage.setItem('robots', JSON.stringify(localStorageRobots));
+    }
   }
 
   return (
@@ -55,7 +71,7 @@ const App: FunctionComponent<any> = () => {
         {
           robotsManager.length > 0 ? <RobotSection robotsProps={robotsManager} messagesProps={messages} /> : null
         }
-        <FormSection robotsProps={robots} addRobots={addRobots} />
+        <FormSection robotsProps={getRobots} addRobots={addRobots} />
       </>
     </main >
   );
