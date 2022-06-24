@@ -12,6 +12,10 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
     'select-color': 'hidden',
     'write-comment': 'hidden',
   });
+  let tempRobots: RobotManager[] = useMemo(() => {
+    return robotsProps
+  }, [robotsProps]);
+
   const [robotDataEntered, setRobotDataEntered] = useState<IRobot>({
     name: '',
     robotType: RobotType.MALE,
@@ -26,15 +30,6 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
   });
 
   useEffect(() => {
-    console.log('USEEFFECT FORM robotsProps', robotsProps);
-
-    setRobots(robotsProps);
-    console.log(robotsProps);
-
-  }, [robotsProps.length])
-
-
-  useEffect(() => {
     console.log('FORM USEEFFECT robotDataEntered', robotDataEntered);
 
     setErrorLabels({
@@ -43,10 +38,6 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
       'write-comment': 'hidden',
     })
   }, [robotDataEntered])
-
-  // const add: void = useMemo((robotDataEntered) => {
-  //   return addRobots(robotDataEntered);
-  // }, [robotDataEntered])
 
   function onSubmitHandler(e: React.FormEvent<HTMLButtonElement>): void {
     console.log(robotDataEntered);
@@ -149,7 +140,7 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
       </div>
       <div id="table-section">
         <h2 id="has-robot-counter">No robots created yet</h2>
-        {robots.length > 0 ?
+        {tempRobots.length > 0 ?
           <table className="table" style={{ visibility: 'visible' }}>
             <tbody>
               <>
@@ -159,11 +150,11 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
                   <th>Color</th>
                   <th>Options</th>
                 </tr>
-                {robots.length > 0 && robots.map(robot => {
+                {tempRobots.length > 0 && tempRobots.map((robot, i) => {
                   console.log('ROBOTS', robot);
 
                   return (
-                    <tr>
+                    <tr key={i}>
                       <td>{robot.name}</td>
                       <td>{robot.robotType}</td>
                       <td>{robot.color}</td>
