@@ -5,7 +5,7 @@ import { RobotType, FormProps, IRobot, IErrors } from '../../interfaces/types';
 import RobotManager from '../../models/RobotModel';
 import checkForRobotInputErrors from '../../models/errorHandling';
 
-const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) => {
+const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots, deleteAllRobots }) => {
   const [robots, setRobots] = useState<RobotManager[]>([]);
   const [errorLabels, setErrorLabels] = useState<IErrors>({
     'name': 'hidden',
@@ -15,6 +15,7 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
   let tempRobots: RobotManager[] = useMemo(() => {
     return robotsProps
   }, [robotsProps]);
+  const [showRobotsVisibility, setShowRobotsVisibility] = useState<boolean>(false);
 
   const [robotDataEntered, setRobotDataEntered] = useState<IRobot>({
     name: '',
@@ -30,14 +31,8 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
   });
 
   useEffect(() => {
-    console.log('FORM USEEFFECT robotDataEntered', robotDataEntered);
-
-    setErrorLabels({
-      'name': 'hidden',
-      'select-color': 'hidden',
-      'write-comment': 'hidden',
-    })
-  }, [robotDataEntered])
+    setRobots(robotsProps);
+  }, [robotsProps])
 
   function onSubmitHandler(e: React.FormEvent<HTMLButtonElement>): void {
     console.log(robotDataEntered);
@@ -65,6 +60,11 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
           'canBlink': false,
         }
       })
+      setErrorLabels({
+        'name': 'hidden',
+        'select-color': 'hidden',
+        'write-comment': 'hidden'
+      });
     }
 
     console.log('Has error', hasError);
@@ -72,7 +72,11 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
     e.preventDefault();
   }
 
-  let handleChange = (e: React.FormEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
+  const showRobots = (): void => {
+    setShowRobotsVisibility(true);
+  }
+
+  const handleChange = (e: React.FormEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>): void => {
     e.stopPropagation();
     let inputValue: string | boolean = e.currentTarget.value;
     const name: string = e.currentTarget.name;
@@ -134,14 +138,14 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
       </div>
       <div className="buttons">
         <button id="onSubmitBtn" onClick={onSubmitHandler}>Create</button>
-        <button id="showCreatedRobotsBtn">Show created robots</button>
-        <button className="clearLocalStorageBtn">Delete all robots</button>
+        <button id="showCreatedRobotsBtn" onClick={showRobots}>Show created robots</button>
+        <button className="clearLocalStorageBtn" onClick={deleteAllRobots}>Delete all robots</button>
         <div></div>
       </div>
       <div id="table-section">
-        <h2 id="has-robot-counter">No robots created yet</h2>
-        {tempRobots.length > 0 ?
-          <table className="table" style={{ visibility: 'visible' }}>
+        <h2 id="has-robot-counter" style={{ visibility: robots.length > 0 ? 'hidden' : 'visible' }}>No robots created yet</h2>
+        {robots.length > 0 ?
+          <table className="table" style={{ visibility: showRobotsVisibility ? 'visible' : 'collapse' }}>
             <tbody>
               <>
                 <tr>
@@ -150,7 +154,7 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
                   <th>Color</th>
                   <th>Options</th>
                 </tr>
-                {tempRobots.length > 0 && tempRobots.map((robot, i) => {
+                {robots.length > 0 && robots.map((robot, i) => {
                   console.log('ROBOTS', robot);
 
                   return (
@@ -169,7 +173,7 @@ const FormSection: FunctionComponent<FormProps> = ({ robotsProps, addRobots }) =
           null
         }
       </div>
-    </section>
+    </section >
   )
 };
 

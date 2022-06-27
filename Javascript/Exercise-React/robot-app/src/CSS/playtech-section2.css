@@ -140,7 +140,7 @@ input {
 }
 
 .table {
-    visibility: hidden;
+    /* visibility: hidden; */
     width: 95%;
     margin: 0 auto;
     border-collapse: collapse;

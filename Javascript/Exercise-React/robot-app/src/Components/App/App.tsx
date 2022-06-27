@@ -12,13 +12,13 @@ const App: FunctionComponent<any> = () => {
   useEffect(() => {
     console.log('use effect', robotsManager);
     getRobotsFromLocalStorage();
-  }, [robotsManager.length])
+  }, [robotsManager.length === 0])
 
   const getRobots = useMemo(() => {
     return robotsManager;
   }, [robotsManager.length])
 
-  function getRobotsFromLocalStorage(): void {
+  const getRobotsFromLocalStorage = useCallback((): void => {
     if (localStorage.getItem('robots')) {
       let robotsFromLocalStorage: RobotManager[] = JSON.parse(localStorage.getItem('robots') || '');
       const robotsArr: RobotManager[] = [];
@@ -32,7 +32,7 @@ const App: FunctionComponent<any> = () => {
         setManagerRobots(robotsArr);
       }
     }
-  }
+  }, [robotsManager.length === 0])
 
   const addRobots = useCallback((robot: IRobot): void => {
     let id: number = 0;
@@ -65,13 +65,20 @@ const App: FunctionComponent<any> = () => {
     }
   }
 
+  const deleteAllRobots = (): void => {
+    if (localStorage.getItem('robots')) {
+      localStorage.removeItem('robots');
+      setManagerRobots([]);
+    }
+  }
+
   return (
     <main>
       <>
         {
           robotsManager.length > 0 ? <RobotSection robotsProps={robotsManager} messagesProps={messages} /> : null
         }
-        <FormSection robotsProps={getRobots} addRobots={addRobots} />
+        <FormSection robotsProps={getRobots} addRobots={addRobots} deleteAllRobots={deleteAllRobots} />
       </>
     </main >
   );
