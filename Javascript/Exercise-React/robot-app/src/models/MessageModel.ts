@@ -1,19 +1,48 @@
 import { IMessage } from '../interfaces/types.js';
 
-class ChatManager {
+class MessageManager {
     private _message: string;
     private _id: number = 0;
-    private _creatorsId: number;
+    private _creatorId: number;
+    private _currentRobotsIds: number[] = [];
+    private _time: Date = new Date;
 
-    constructor(message: string, id: number, creatorsId: number) {
+    constructor(message: string, id: number, creatorId: number, currentRobotsIds: number[], time: Date) {
         this._message = message;
-        this._creatorsId = creatorsId;
         this._id = id;
+        this._creatorId = creatorId;
+        this._currentRobotsIds = currentRobotsIds;
+        this._time = time;
     }
 
-    // public getMessages(): IMessage[] {
-    //     return this._messages;
-    // }
+    get message(): string {
+        return this._message;
+    }
+
+    get id(): number {
+        return this._id;
+    }
+
+    get creatorId(): number {
+        return this._creatorId;
+    }
+
+    get currentRobotsIds(): number[] {
+        return this._currentRobotsIds;
+    }
+    get time(): Date {
+        return this._time;
+    }
+
+    public getMessageInfo(): IMessage {
+        return {
+            message: this.message,
+            id: this.id,
+            creatorId: this.creatorId,
+            currentRobotsIds: this.currentRobotsIds,
+            time: this.time,
+        }
+    }
 
     // public addMessage(message: IMessage): void {
     //     this._messages.push(message);
@@ -48,9 +77,18 @@ class ChatManager {
     //     return;
     // }
 
-    public getTimeInHoursPM(messageInfo: IMessage): string {
-        console.log('Message info: ', messageInfo);
-        let newDate = new Date(messageInfo.time);
+    // public getTimeInHoursPM(messageInfo: IMessage): string {
+    //     console.log('Message info: ', messageInfo);
+    //     let newDate = new Date(messageInfo.time);
+    //     const timeWithPmAm: string = newDate.toLocaleTimeString('en-US', {
+    //         hour: '2-digit',
+    //         minute: '2-digit',
+    //     });
+    //     return timeWithPmAm;
+    // }
+
+    public getTimeInHoursPM(): string {
+        let newDate = new Date(this.time);
         const timeWithPmAm: string = newDate.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
@@ -59,4 +97,4 @@ class ChatManager {
     }
 };
 
-export default ChatManager;
+export default MessageManager;

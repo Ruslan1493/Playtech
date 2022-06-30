@@ -1,3 +1,4 @@
+import MessageManager from "../models/MessageModel";
 import RobotManager from "../models/RobotModel";
 
 type OptionsObjectKey = keyof typeof options;
@@ -42,7 +43,8 @@ interface IMessage {
 
 interface RobotMessageProps {
     robotsProps: IRobot[],
-    messages: IMessage[] | null
+    messagesProps: IMessage[],
+    addMessage: (message: IMessage) => void
 };
 
 interface RobotAppState {
@@ -62,7 +64,8 @@ interface RobotWrapperProps {
 
 interface RobotProps {
     robotsProps: RobotManager[],
-    messagesProps: IMessage[] | null
+    messagesProps: MessageManager[],
+    addMessage: (message: IMessage) => void
 };
 
 interface SliderButtonsProps {

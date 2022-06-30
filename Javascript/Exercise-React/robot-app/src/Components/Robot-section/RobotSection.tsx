@@ -2,15 +2,16 @@ import { FunctionComponent, useEffect, useState } from 'react';
 import '../../CSS/media-queries.css';
 import '../../CSS/playtech-section1.css';
 import '../../CSS/playtech-section1-messages.css';
-import { IMessage, IRobot, RobotProps } from '../../interfaces/types';
-import { RobotType } from '../../interfaces/types';
+import { RobotProps } from '../../interfaces/types';
 import RobotWrapper from '../Robot-wrapper/RobotWrapper';
 import MessageSection from '../Message-section/MessageSection';
 import SliderButtons from '../Slider-buttons/SliderButtons';
 import RobotManager from '../../models/RobotModel';
+import MessageManager from '../../models/MessageModel';
 
-const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProps }) => {
+const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProps, addMessage }) => {
     const [robots, setRobots] = useState<RobotManager[]>([]);
+    const [messages, setMessages] = useState<MessageManager[]>([]);
     const [selectedRobot, setSelectedRobot] = useState<RobotManager | null>(null);
 
     useEffect(() => {
@@ -18,7 +19,11 @@ const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProp
         setSelectedRobot(robots[robots.length - 1])
     }, [robots.length !== robotsProps.length])
 
-    const prevRobot = (): void => {        
+    useEffect(() => {
+        setMessages(messagesProps);
+    }, [robots.length !== robotsProps.length])
+
+    const prevRobot = (): void => {
         if (selectedRobot && selectedRobot.id === 0) {
             setSelectedRobot(robots[robots.length - 1]);
         } else if (selectedRobot) {
@@ -40,10 +45,10 @@ const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProp
                 <p className="factory-header">{selectedRobot ? (selectedRobot.robotType + " Robot") : null}</p>
                 <div className="content-wrapper">
                     <RobotWrapper robot={selectedRobot ? selectedRobot : null} />
-                    <MessageSection robotsProps={robots} messages={messagesProps} />
+                    <MessageSection robotsProps={robots} messagesProps={messages} addMessage={addMessage} />
                 </div>
-                    <SliderButtons prevRobot={prevRobot} nextRobot={nextRobot} />
             </section>
+            {robots.length > 1 ? <SliderButtons prevRobot={prevRobot} nextRobot={nextRobot} /> : null}
         </>
 
     )

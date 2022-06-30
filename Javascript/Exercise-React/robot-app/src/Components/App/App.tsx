@@ -1,12 +1,13 @@
 import { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react';
 import RobotSection from '../Robot-section/RobotSection';
 import FormSection from '../Form-section/FormSections';
-import { IRobot } from '../../interfaces/types';
+import { IMessage, IRobot } from '../../interfaces/types';
 import RobotManager from '../../models/RobotModel';
+import MessageManager from '../../models/MessageModel';
 
 const App: FunctionComponent<any> = () => {
   const [robotsManager, setManagerRobots] = useState<RobotManager[]>([]);
-  const [messages, setMessages] = useState([]);
+  const [messagesManager, setManagerMessages] = useState<MessageManager[]>([]);
 
   useEffect(() => {
     console.log('use effect', robotsManager);
@@ -16,6 +17,10 @@ const App: FunctionComponent<any> = () => {
   const getRobots = useMemo(() => {
     return robotsManager;
   }, [robotsManager.length])
+
+  const getMessages = useMemo(() => {
+    return messagesManager;
+  }, [messagesManager.length])
 
   const getRobotsFromLocalStorage = useCallback((): void => {
     if (localStorage.getItem('robots')) {
@@ -71,11 +76,26 @@ const App: FunctionComponent<any> = () => {
     }
   }
 
+  const addMessage = useCallback((message: IMessage): void => {
+
+  }, [messagesManager.length])
+
+  function addMessageToLocalStorage(message: IMessage): void {
+    if (!localStorage.getItem('messages')) {
+      localStorage.setItem('messages', JSON.stringify([message]));
+    }
+    if (localStorage.getItem('messages')) {
+      let localStorageMessages: IMessage[] = JSON.parse(localStorage.getItem('messages') || '');
+      localStorageMessages.push(message);
+      localStorage.setItem('messages', JSON.stringify(localStorageMessages));
+    }
+  }
+
   return (
     <main>
       <>
         {
-          robotsManager.length > 0 ? <RobotSection robotsProps={getRobots} messagesProps={messages} /> : null
+          robotsManager.length > 0 ? <RobotSection robotsProps={getRobots} messagesProps={getMessages} addMessage={addMessage} /> : null
         }
         <FormSection robotsProps={getRobots} addRobots={addRobots} deleteAllRobots={deleteAllRobots} />
       </>
