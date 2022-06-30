@@ -18,6 +18,22 @@ const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProp
         setSelectedRobot(robots[robots.length - 1])
     }, [robots.length !== robotsProps.length])
 
+    const prevRobot = (): void => {        
+        if (selectedRobot && selectedRobot.id === 0) {
+            setSelectedRobot(robots[robots.length - 1]);
+        } else if (selectedRobot) {
+            setSelectedRobot(robots[selectedRobot?.id - 1]);
+        }
+    }
+
+    const nextRobot = (): void => {
+        if (selectedRobot && selectedRobot.id === robots.length - 1) {
+            setSelectedRobot(robots[0]);
+        } else if (selectedRobot) {
+            setSelectedRobot(robots[selectedRobot?.id + 1]);
+        }
+    }
+
     return (
         <>
             <section id="slide-1" className="factory-section">
@@ -25,8 +41,8 @@ const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProp
                 <div className="content-wrapper">
                     <RobotWrapper robot={selectedRobot ? selectedRobot : null} />
                     <MessageSection robotsProps={robots} messages={messagesProps} />
-                    <SliderButtons />
                 </div>
+                    <SliderButtons prevRobot={prevRobot} nextRobot={nextRobot} />
             </section>
         </>
 

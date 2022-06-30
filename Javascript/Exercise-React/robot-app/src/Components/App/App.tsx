@@ -7,7 +7,6 @@ import RobotManager from '../../models/RobotModel';
 const App: FunctionComponent<any> = () => {
   const [robotsManager, setManagerRobots] = useState<RobotManager[]>([]);
   const [messages, setMessages] = useState([]);
-  const robots: RobotManager[] = [];
 
   useEffect(() => {
     console.log('use effect', robotsManager);
@@ -76,7 +75,7 @@ const App: FunctionComponent<any> = () => {
     <main>
       <>
         {
-          robotsManager.length > 0 ? <RobotSection robotsProps={robotsManager} messagesProps={messages} /> : null
+          robotsManager.length > 0 ? <RobotSection robotsProps={getRobots} messagesProps={messages} /> : null
         }
         <FormSection robotsProps={getRobots} addRobots={addRobots} deleteAllRobots={deleteAllRobots} />
       </>

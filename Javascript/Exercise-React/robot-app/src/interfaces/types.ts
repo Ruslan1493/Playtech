@@ -65,11 +65,16 @@ interface RobotProps {
     messagesProps: IMessage[] | null
 };
 
+interface SliderButtonsProps {
+    prevRobot: () => void,
+    nextRobot: () => void
+};
+
 interface IErrors {
     'name': string,
     'select-color': string,
     'write-comment': string,
 };
 
-export type { IRobot, Options, OptionsObjectKey, IMessage, IErrors, RobotAppState, FormProps, RobotWrapperProps, RobotMessageProps, RobotProps };
+export type { IRobot, Options, OptionsObjectKey, IMessage, IErrors, RobotAppState, FormProps, RobotWrapperProps, RobotMessageProps, RobotProps, SliderButtonsProps };
 export { RobotType };

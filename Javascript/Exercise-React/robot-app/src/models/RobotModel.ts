@@ -1,7 +1,6 @@
 import { IRobot, Options, RobotType } from '../interfaces/types';
 
 class RobotManager {
-    // private _robots: IRobot[] = [];
     private _name: string = '';
     private _robotType: RobotType = RobotType.MALE;
     private _color: string = '#e96126';
@@ -20,7 +19,6 @@ class RobotManager {
         this._phrase = phrase;
         this._id = id;
         this._options = options;
-        // this.getRobotsFromLocalStorage();
     }
 
     public get name(): string {
