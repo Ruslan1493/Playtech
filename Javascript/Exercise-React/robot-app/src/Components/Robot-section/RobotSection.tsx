@@ -45,7 +45,7 @@ const RobotSection: FunctionComponent<RobotProps> = ({ robotsProps, messagesProp
                 <p className="factory-header">{selectedRobot ? (selectedRobot.robotType + " Robot") : null}</p>
                 <div className="content-wrapper">
                     <RobotWrapper robot={selectedRobot ? selectedRobot : null} />
-                    <MessageSection robotsProps={robots} messagesProps={messages} addMessage={addMessage} />
+                    <MessageSection robotsProps={robots} messagesProps={messagesProps} selectedRobot={selectedRobot} addMessage={addMessage} />
                 </div>
             </section>
             {robots.length > 1 ? <SliderButtons prevRobot={prevRobot} nextRobot={nextRobot} /> : null}

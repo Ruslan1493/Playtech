@@ -15,22 +15,22 @@ class MessageManager {
         this._time = time;
     }
 
-    get message(): string {
+    public get message(): string {
         return this._message;
     }
 
-    get id(): number {
+    public get id(): number {
         return this._id;
     }
 
-    get creatorId(): number {
+    public get creatorId(): number {
         return this._creatorId;
     }
 
-    get currentRobotsIds(): number[] {
+    public get currentRobotsIds(): number[] {
         return this._currentRobotsIds;
     }
-    get time(): Date {
+    public get time(): Date {
         return this._time;
     }
 
@@ -87,14 +87,14 @@ class MessageManager {
     //     return timeWithPmAm;
     // }
 
-    public getTimeInHoursPM(): string {
-        let newDate = new Date(this.time);
-        const timeWithPmAm: string = newDate.toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-        return timeWithPmAm;
-    }
+    // public getTimeInHoursPM(): string {
+    //     let newDate = new Date(this.time);
+    //     const timeWithPmAm: string = newDate.toLocaleTimeString('en-US', {
+    //         hour: '2-digit',
+    //         minute: '2-digit',
+    //     });
+    //     return timeWithPmAm;
+    // }
 };
 
 export default MessageManager;

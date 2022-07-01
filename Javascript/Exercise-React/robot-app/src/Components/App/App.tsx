@@ -12,13 +12,15 @@ const App: FunctionComponent<any> = () => {
   useEffect(() => {
     console.log('use effect', robotsManager);
     getRobotsFromLocalStorage();
-  }, [robotsManager.length === 0])
+  }, [robotsManager.length])
 
   const getRobots = useMemo(() => {
     return robotsManager;
   }, [robotsManager.length])
 
   const getMessages = useMemo(() => {
+    console.log('Messages updated!', messagesManager);
+    
     return messagesManager;
   }, [messagesManager.length])
 
@@ -43,18 +45,18 @@ const App: FunctionComponent<any> = () => {
     if (robotsManager.length > 0) {
       id = robotsManager[robotsManager.length - 1].id + 1;
     }
-    const robotManager = new RobotManager(robot.name, robot.robotType, robot.color, robot.phrase, id, robot.options);
+    const newRobotManager = new RobotManager(robot.name, robot.robotType, robot.color, robot.phrase, id, robot.options);
 
     const newRobot: IRobot = {
-      name: robotManager.name,
-      robotType: robotManager.robotType,
-      color: robotManager.color,
-      phrase: robotManager.phrase,
+      name: newRobotManager.name,
+      robotType: newRobotManager.robotType,
+      color: newRobotManager.color,
+      phrase: newRobotManager.phrase,
       id,
-      options: robotManager.options
+      options: newRobotManager.options
     }
     addRobotToLocalStorage(newRobot);
-    setManagerRobots([...robotsManager, robotManager]);
+    setManagerRobots([...robotsManager, newRobotManager]);
   }, [robotsManager.length])
 
   function addRobotToLocalStorage(robot: IRobot): void {
@@ -77,7 +79,20 @@ const App: FunctionComponent<any> = () => {
   }
 
   const addMessage = useCallback((message: IMessage): void => {
-
+    let id: number = 0;
+    if (messagesManager.length > 0) {
+      id = messagesManager[messagesManager.length - 1].id;
+    }
+    const newMessageManager: MessageManager = new MessageManager(message.message, id, message.creatorId, message.currentRobotsIds, message.time);
+    const newMessage: IMessage = {
+      message: newMessageManager.message,
+      id,
+      creatorId: newMessageManager.creatorId,
+      currentRobotsIds: newMessageManager.currentRobotsIds,
+      time: newMessageManager.time,
+    }
+    addMessageToLocalStorage(newMessage)
+    setManagerMessages([...messagesManager, newMessageManager])
   }, [messagesManager.length])
 
   function addMessageToLocalStorage(message: IMessage): void {

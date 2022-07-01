@@ -44,6 +44,7 @@ interface IMessage {
 interface RobotMessageProps {
     robotsProps: IRobot[],
     messagesProps: IMessage[],
+    selectedRobot: RobotManager | null
     addMessage: (message: IMessage) => void
 };
 
