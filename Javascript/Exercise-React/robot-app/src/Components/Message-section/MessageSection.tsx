@@ -1,8 +1,15 @@
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useEffect, useMemo, useState } from 'react';
 import { IMessage, RobotMessageProps } from '../../interfaces/types';
 
 const MessageSection: FunctionComponent<RobotMessageProps> = ({ robotsProps, messagesProps, selectedRobot, addMessage }) => {
     const [messageInput, setMessageInput] = useState<string>('');
+    const [messages, setMessages] = useState<IMessage[]>([]);
+
+    useEffect(() => {
+        console.log('MESSAGE SECTION', messagesProps);
+        
+        setMessages(messagesProps);
+    }, [messagesProps.length])
 
     const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
         console.log(e.currentTarget.value);
@@ -18,6 +25,7 @@ const MessageSection: FunctionComponent<RobotMessageProps> = ({ robotsProps, mes
             currentRobotsIds: robotsProps.map(m => m.id),
             time: new Date()
         }
+        setMessageInput('');
         addMessage(messageInfo);
     }
 
@@ -30,6 +38,19 @@ const MessageSection: FunctionComponent<RobotMessageProps> = ({ robotsProps, mes
         return timeWithPmAm;
     }
 
+    const showCurrentMessage = (message: IMessage): boolean => {
+        if (selectedRobot && message.currentRobotsIds.includes(selectedRobot?.id)) {
+            return true;
+        }
+        return false;
+    }
+
+    const reverseMessageOrder = (): void => {
+        const newMessageOrder: IMessage[] = [...messages];
+        newMessageOrder.reverse();
+        setMessages(newMessageOrder);
+    }
+
     return (
         <div className="boxesWrapper">
             <div className="create-message">
@@ -39,20 +60,26 @@ const MessageSection: FunctionComponent<RobotMessageProps> = ({ robotsProps, mes
                     <input type="text" id="message-input" name="messageInput" placeholder="write message here" value={messageInput} onChange={handleChange} />
                 </div>
                 <button id="sendMessageBtn" onClick={sendMessage}>Send</button>
-                <button id="reverseMessagesOrderBtn">Reverse message order</button>
+                <button id="reverseMessagesOrderBtn" onClick={reverseMessageOrder}>Reverse message order</button>
             </div>
-
-            <div className="messages">
-                <p><span>Last messages</span></p>
-                <ul>
-                    {messagesProps.length > 0 ? messagesProps.map((m, i) => {
-                        return <li key={i}>
-                            <p><span style={{ color: selectedRobot?.color }}>{selectedRobot?.name}</span>{' ' + getTimeInHoursPM(m.time)}</p>
-                            <p>{m.message}</p>
-                        </li>
-                    }) : null}
-                </ul>
-            </div>
+            {selectedRobot && messages.filter(m => m.currentRobotsIds.includes(selectedRobot?.id)).length > 0 ?
+                <div className="messages">
+                    <p><span>Last messages</span></p>
+                    <ul>
+                        {messages.length > 0 ? messages.map((m, i) => {
+                            return (showCurrentMessage(m)
+                                ?
+                                <li key={i}>
+                                    <p><span style={{ color: robotsProps[m.creatorId].color }}>{robotsProps[m.creatorId].name}</span>{' ' + getTimeInHoursPM(m.time)}</p>
+                                    <p>{m.message}</p>
+                                </li>
+                                :
+                                null)
+                        }) : null}
+                    </ul>
+                </div>
+                : null
+            }
         </div>
     )
 };

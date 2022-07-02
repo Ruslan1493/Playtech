@@ -14,13 +14,19 @@ const App: FunctionComponent<any> = () => {
     getRobotsFromLocalStorage();
   }, [robotsManager.length])
 
+  useEffect(() => {
+    getMessagesFromLocalStorage();
+    console.log('USE EFFECT MESSAGES getMessagesFromLocalStorage', messagesManager);
+    
+  }, [messagesManager.length])
+
   const getRobots = useMemo(() => {
     return robotsManager;
   }, [robotsManager.length])
 
   const getMessages = useMemo(() => {
     console.log('Messages updated!', messagesManager);
-    
+
     return messagesManager;
   }, [messagesManager.length])
 
@@ -77,6 +83,20 @@ const App: FunctionComponent<any> = () => {
       setManagerRobots([]);
     }
   }
+
+  const getMessagesFromLocalStorage = useCallback((): void => {
+    if (localStorage.getItem('messages')) {
+      let messagesFromLocalStorage: MessageManager[] = JSON.parse(localStorage.getItem('messages') || '');
+      const messagesArr: MessageManager[] = [];
+      if (messagesFromLocalStorage && messagesFromLocalStorage.length > 0) {
+        messagesFromLocalStorage.forEach(message => {
+          const newMessage = new MessageManager(message.message, message.id, message.creatorId, message.currentRobotsIds, message.time);
+          messagesArr.push(newMessage)
+        })
+        setManagerMessages(messagesArr);
+      }
+    }
+  }, [messagesManager.length === 0])
 
   const addMessage = useCallback((message: IMessage): void => {
     let id: number = 0;
